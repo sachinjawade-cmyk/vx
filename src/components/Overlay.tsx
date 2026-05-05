@@ -23,9 +23,9 @@ export default function Overlay({ scrollYProgress }: { scrollYProgress: MotionVa
   const opacity2 = useTransform(scrollYProgress, [0.2, 0.3, 0.45, 0.55], [0, 1, 1, 0]);
   const y2 = useTransform(scrollYProgress, [0.2, 0.55], [100, -100]);
 
-  // Section 3 (60% scroll): "Bridging design and engineering." (Right aligned)
-  const opacity3 = useTransform(scrollYProgress, [0.5, 0.6, 0.8, 0.9], [0, 1, 1, 0]);
-  const y3 = useTransform(scrollYProgress, [0.5, 0.9], [100, -100]);
+  // Section 3 (30% scroll): "Bridging design and engineering." (Right aligned)
+  const opacity3 = useTransform(scrollYProgress, [0.2, 0.3, 0.45, 0.55], [0, 1, 1, 0]);
+  const y3 = useTransform(scrollYProgress, [0.2, 0.55], [100, -100]);
 
   return (
     <div className="absolute inset-0 z-10 pointer-events-none px-6 md:px-24">

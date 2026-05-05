@@ -4,6 +4,7 @@ import { useRef } from "react";
 import ScrollyCanvas from "@/components/ScrollyCanvas";
 import Overlay from "@/components/Overlay";
 import Projects from "@/components/Projects";
+import Offerings from "@/components/Offerings";
 import { useScroll } from "framer-motion";
 
 export default function Home() {
@@ -28,6 +29,8 @@ export default function Home() {
 
       {/* Renders after the scroll sequence finishes */}
       <Projects />
+
+      <Offerings />
       
       <footer className="py-12 border-t border-neutral-900 text-center text-neutral-500 text-sm bg-[#121212]">
         <p>© {new Date().getFullYear()} John Doe. Built with Next.js & Framer Motion.</p>
