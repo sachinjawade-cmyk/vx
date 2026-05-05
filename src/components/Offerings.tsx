@@ -58,7 +58,7 @@ export default function Offerings() {
         const i = Math.floor(scrollYProgress.get() / segment);
 
         if (i === index) return -p * 20;
-        if (i + 1 === index) return 30 - p * 30;
+        if (i + 1 === index) return 5 - p * 5;
 
         return 0;
       }),
@@ -93,6 +93,7 @@ export default function Offerings() {
   return (
     <section ref={containerRef} className="relative h-[400vh] bg-[#131313] whitespace-nowrap">
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+
         <div className="w-full max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-12 items-center">
 
           {/* LEFT – IMAGES */}
