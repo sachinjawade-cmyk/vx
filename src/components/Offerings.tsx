@@ -84,7 +84,7 @@ export default function Offerings() {
       color: useTransform(progressInSegment, (p) => {
         const i = Math.floor(scrollYProgress.get() / segment);
 
-        if (i === index) return "#ffffff";
+        if (i === index) return "#F0F0E5";
         return "#555555"; // ALL others dim (your requirement)
       })
     };
