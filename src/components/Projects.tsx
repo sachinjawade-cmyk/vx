@@ -19,7 +19,7 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-[#F5F2EB] leading-[1.1]"
+          className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tight text-[#F5F2EB] leading-[1.1]"
         >
           Four ways<br />we bring ideas<br />to life.
         </motion.h3>
