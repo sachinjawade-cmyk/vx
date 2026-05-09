@@ -18,20 +18,20 @@ import Image from "next/image";
 
 const OFFERINGS = [
   {
-    title: "Digital Experience",
-    image: "digital-experience.png",
-  },
-  {
     title: "Immersive Experience",
     image: "immersive-experience.png",
+  },
+  {
+    title: "Simulation-Based Learning",
+    image: "simulation-learning.png",
   },
   {
     title: "Event & Brand Experiences",
     image: "event-brand-experience.png",
   },
   {
-    title: "Simulation-Based Learning",
-    image: "simulation-learning.png",
+    title: "Digital Experience",
+    image: "digital-experience.png",
   },
 ];
 
