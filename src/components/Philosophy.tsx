@@ -40,23 +40,23 @@ const SECTION_HEIGHT = "400vh";
 
 const STICKY_HEIGHT = "100vh";
 
-const CONTENT_AREA_HEIGHT = 900;
+const CONTENT_AREA_HEIGHT = 1000;
 
-/*
-  Motion distances
-*/
+/* -------------------------------------------------------------------------- */
+/*                              MOTION DISTANCE                               */
+/* -------------------------------------------------------------------------- */
 
-const CONTENT_Y_ENTER = 120;
-const CONTENT_Y_EXIT = -120;
+const CONTENT_Y_ENTER = 80;
+const CONTENT_Y_EXIT = -80;
 
 /* -------------------------------------------------------------------------- */
 /*                              SPRING CONFIG                                 */
 /* -------------------------------------------------------------------------- */
 
 const SMOOTH_SCROLL_CONFIG = {
-  stiffness: 180,
-  damping: 32,
-  mass: 0.6,
+  stiffness: 170,
+  damping: 30,
+  mass: 0.55,
 };
 
 /* -------------------------------------------------------------------------- */
@@ -108,43 +108,38 @@ export default function Philosophy() {
       }}
     >
       {/* ================================================================== */}
-      {/*                           STICKY WRAPPER                            */}
+      {/*                           STICKY WRAPPER                           */}
       {/* ================================================================== */}
 
       <div
         className="
           sticky
           top-0
+          h-screen
           overflow-hidden
+          flex
+          items-center
         "
-        style={{
-          height: STICKY_HEIGHT,
-        }}
       >
+        {/* ================================================================ */}
+        {/*                            CONTENT                               */}
+        {/* ================================================================ */}
+
         <div
           className="
             w-full
-            max-w-[1400px]
+            max-w-[1500px]
             mx-auto
-            px-10
-            md:px-16
-            flex
-            items-start
-            justify-center
-            pt-[12vh]
+            px-8
+            md:px-14
           "
         >
-          {/* ============================================================ */}
-          {/*                         CONTENT                              */}
-          {/* ============================================================ */}
-
           <div
             className="
               relative
-              overflow-hidden
-              flex
-              items-start
               w-full
+              flex
+              items-center
             "
             style={{
               height:
@@ -174,7 +169,7 @@ export default function Philosophy() {
                   segment;
 
                 /* ------------------------------------------------------ */
-                /*                       OPACITY                         */
+                /*                         OPACITY                       */
                 /* ------------------------------------------------------ */
 
                 const opacity =
@@ -189,7 +184,7 @@ export default function Philosophy() {
                   );
 
                 /* ------------------------------------------------------ */
-                /*                           Y                           */
+                /*                            Y                          */
                 /* ------------------------------------------------------ */
 
                 const y =
@@ -220,9 +215,9 @@ export default function Philosophy() {
                       end,
                     ],
                     [
-                      0.98,
+                      0.985,
                       1,
-                      0.98,
+                      0.985,
                     ]
                   );
 
@@ -239,8 +234,7 @@ export default function Philosophy() {
                       inset-0
                       flex
                       flex-col
-                      justify-start
-                      pt-[140px]
+                      justify-center
                     "
                   >
                     {/* SMALL LABEL */}
@@ -248,11 +242,11 @@ export default function Philosophy() {
                     <div
                       className="
                         text-[22px]
-                        md:text-[28px]
+                        md:text-[30px]
                         font-semibold
-                        tracking-[-0.03em]
-                        text-[#F0F0E5]
-                        mb-2
+                        tracking-[-0.04em]
+                        text-[#8D8D8D]
+                        mb-3
                       "
                     >
                       {block.heading}
@@ -262,16 +256,22 @@ export default function Philosophy() {
 
                     <p
                       className="
-                        text-[44px]
-                        sm:text-[58px]
-                        md:text-[72px]
-                        lg:text-[84px]
-                        xl:text-[92px]
+                        text-[52px]
+                        sm:text-[68px]
+                        md:text-[82px]
+                        lg:text-[96px]
+                        xl:text-[108px]
+
                         leading-[0.9]
+
                         tracking-[-0.02em]
+
                         font-medium
+
                         whitespace-pre-line
-                        text-[#F0F0E5]
+
+                        text-[#F5F2EB]
+
                         max-w-[1500px]
                       "
                     >
