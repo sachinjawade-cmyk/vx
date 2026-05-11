@@ -241,7 +241,7 @@ export default function Partners() {
 
                   rounded-[18px]
 
-                  bg-[#1D1D1D]
+                  bg-[black/40]
 
                   border
                   border-white/[0.08]
