@@ -37,7 +37,7 @@ const PARAGRAPH_DURATION = 1;
 const HEADLINE_STAGGER_DELAY = 0.12;
 const PARAGRAPH_DELAY = 0.45;
 
-const CINEMATIC_EASE = [0.22, 1, 0.36, 1];
+const CINEMATIC_EASE = [0.22, 1, 0.36, 1] as const;
 
 /* -------------------------------------------------------------------------- */
 /*                                   STYLES                                   */
