@@ -5,6 +5,7 @@ import ScrollyCanvas from "@/components/ScrollyCanvas";
 import Overlay from "@/components/Overlay";
 import Projects from "@/components/Projects";
 import Offerings from "@/components/Offerings";
+import Philosophy from "@/components/Philosophy";
 import { useScroll } from "framer-motion";
 
 export default function Home() {
@@ -29,6 +30,8 @@ export default function Home() {
 
       {/* Renders after the scroll sequence finishes */}
       <Projects />
+
+      <Philosophy />
 
       <Offerings />
       
