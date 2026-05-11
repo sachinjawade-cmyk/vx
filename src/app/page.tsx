@@ -6,6 +6,7 @@ import Overlay from "@/components/Overlay";
 import Projects from "@/components/Projects";
 import Offerings from "@/components/Offerings";
 import Philosophy from "@/components/Philosophy";
+import Partners from "@/components/Partners";
 import { useScroll } from "framer-motion";
 
 export default function Home() {
@@ -32,6 +33,8 @@ export default function Home() {
       <Projects />
 
       <Philosophy />
+
+      <Partners />
 
       <Offerings />
       
