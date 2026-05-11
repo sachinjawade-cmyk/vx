@@ -26,11 +26,11 @@ const OFFERINGS = [
     image: "simulation-learning.png",
   },
   {
-    title: "Event & Brand Experiences",
+    title: "Event & Brand Activation",
     image: "event-brand-experience.png",
   },
   {
-    title: "Digital Experience",
+    title: "Spatial Digital Experiences",
     image: "digital-experience.png",
   },
 ];
@@ -90,10 +90,10 @@ const FAR_OFFERING_COLOR = "#2A2A2A";
 /* -------------------------------------------------------------------------- */
 
 const IMAGE_CONTAINER_CLASSNAME =
-  "relative w-full aspect-video lg:aspect-[4/3] overflow-hidden";
+  "relative w-[420px] lg:w-[473px] aspect-[473/607] overflow-hidden rounded-[24px]";
 
 const TITLE_CLASSNAME =
-  "text-3xl md:text-5xl lg:text-6xl xl:text-[4.5rem] leading-[0.95] font-semibold tracking-[-0.05em] whitespace-nowrap";
+  "text-3xl md:text-5xl lg:text-6xl xl:text-[4.5rem] leading-[0.9] font-semibold";
 
 const LABEL_CLASSNAME =
   "text-[#7A7A7A] text-sm md:text-base uppercase tracking-[0.18em] mb-8";
