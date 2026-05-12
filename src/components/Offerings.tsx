@@ -70,46 +70,94 @@ const GRADIENT_LEFT_WIDTH = "55%";
 /*                            CUSTOM HOOKS                                    */
 /* -------------------------------------------------------------------------- */
 
-function useOfferingMotionValues(activeIndex: ReturnType<typeof useTransform<number, number>>) {
-  const img0 = useTransform(activeIndex, (current) => (current === 0 ? 1 : 0));
-  const img1 = useTransform(activeIndex, (current) => (current === 1 ? 1 : 0));
-  const img2 = useTransform(activeIndex, (current) => (current === 2 ? 1 : 0));
-  const img3 = useTransform(activeIndex, (current) => (current === 3 ? 1 : 0));
+/**
+ * Pre-computes ALL motion values at the top level.
+ * For 4 slides, we create explicit transforms for each property.
+ */
+function useSlideMotionValues(currentSlide: ReturnType<typeof useTransform<number, number>>) {
+  /* ----------------------- IMAGE SLIDE POSITIONS -------------------------- */
+  // Slide 0
+  const imgX0 = useTransform(currentSlide, (v) => `${(0 - v) * 100}%`);
+  const imgScale0 = useTransform(currentSlide, (v) => Math.abs(0 - v) < 0.5 ? 1 : 0.92);
+  const imgOpacity0 = useTransform(currentSlide, (v) => Math.abs(0 - v) > 1.5 ? 0 : 1);
 
-  const txtOp0 = useTransform(activeIndex, (current) => (current === 0 ? 1 : 0));
-  const txtOp1 = useTransform(activeIndex, (current) => (current === 1 ? 1 : 0));
-  const txtOp2 = useTransform(activeIndex, (current) => (current === 2 ? 1 : 0));
-  const txtOp3 = useTransform(activeIndex, (current) => (current === 3 ? 1 : 0));
+  // Slide 1
+  const imgX1 = useTransform(currentSlide, (v) => `${(1 - v) * 100}%`);
+  const imgScale1 = useTransform(currentSlide, (v) => Math.abs(1 - v) < 0.5 ? 1 : 0.92);
+  const imgOpacity1 = useTransform(currentSlide, (v) => Math.abs(1 - v) > 1.5 ? 0 : 1);
 
-  const txtY0 = useTransform(activeIndex, (current) => (current === 0 ? 0 : 14));
-  const txtY1 = useTransform(activeIndex, (current) => (current === 1 ? 0 : 14));
-  const txtY2 = useTransform(activeIndex, (current) => (current === 2 ? 0 : 14));
-  const txtY3 = useTransform(activeIndex, (current) => (current === 3 ? 0 : 14));
+  // Slide 2
+  const imgX2 = useTransform(currentSlide, (v) => `${(2 - v) * 100}%`);
+  const imgScale2 = useTransform(currentSlide, (v) => Math.abs(2 - v) < 0.5 ? 1 : 0.92);
+  const imgOpacity2 = useTransform(currentSlide, (v) => Math.abs(2 - v) > 1.5 ? 0 : 1);
 
-  const navOp0 = useTransform(activeIndex, (current) => (current === 0 ? 1 : 0.2));
-  const navOp1 = useTransform(activeIndex, (current) => (current === 1 ? 1 : 0.2));
-  const navOp2 = useTransform(activeIndex, (current) => (current === 2 ? 1 : 0.2));
-  const navOp3 = useTransform(activeIndex, (current) => (current === 3 ? 1 : 0.2));
+  // Slide 3
+  const imgX3 = useTransform(currentSlide, (v) => `${(3 - v) * 100}%`);
+  const imgScale3 = useTransform(currentSlide, (v) => Math.abs(3 - v) < 0.5 ? 1 : 0.92);
+  const imgOpacity3 = useTransform(currentSlide, (v) => Math.abs(3 - v) > 1.5 ? 0 : 1);
 
-  const navCol0 = useTransform(activeIndex, (current) =>
-    current === 0 ? "#ffffff" : "rgba(255,255,255,0.35)"
+  /* ----------------------- TEXT SLIDE POSITIONS --------------------------- */
+  // Title X positions
+  const titleX0 = useTransform(currentSlide, (v) => `${(0 - v) * 60}px`);
+  const titleX1 = useTransform(currentSlide, (v) => `${(1 - v) * 60}px`);
+  const titleX2 = useTransform(currentSlide, (v) => `${(2 - v) * 60}px`);
+  const titleX3 = useTransform(currentSlide, (v) => `${(3 - v) * 60}px`);
+
+  // Title opacities
+  const titleOp0 = useTransform(currentSlide, (v) => Math.abs(0 - v) < 0.5 ? 1 : 0);
+  const titleOp1 = useTransform(currentSlide, (v) => Math.abs(1 - v) < 0.5 ? 1 : 0);
+  const titleOp2 = useTransform(currentSlide, (v) => Math.abs(2 - v) < 0.5 ? 1 : 0);
+  const titleOp3 = useTransform(currentSlide, (v) => Math.abs(3 - v) < 0.5 ? 1 : 0);
+
+  // Description X positions
+  const descX0 = useTransform(currentSlide, (v) => `${(0 - v) * 40}px`);
+  const descX1 = useTransform(currentSlide, (v) => `${(1 - v) * 40}px`);
+  const descX2 = useTransform(currentSlide, (v) => `${(2 - v) * 40}px`);
+  const descX3 = useTransform(currentSlide, (v) => `${(3 - v) * 40}px`);
+
+  // Description opacities
+  const descOp0 = useTransform(currentSlide, (v) => Math.abs(0 - v) < 0.5 ? 1 : 0);
+  const descOp1 = useTransform(currentSlide, (v) => Math.abs(1 - v) < 0.5 ? 1 : 0);
+  const descOp2 = useTransform(currentSlide, (v) => Math.abs(2 - v) < 0.5 ? 1 : 0);
+  const descOp3 = useTransform(currentSlide, (v) => Math.abs(3 - v) < 0.5 ? 1 : 0);
+
+  /* ----------------------- NAV INDICATORS --------------------------------- */
+  const navOp0 = useTransform(currentSlide, (v) => Math.abs(0 - v) < 0.5 ? 1 : 0.2);
+  const navOp1 = useTransform(currentSlide, (v) => Math.abs(1 - v) < 0.5 ? 1 : 0.2);
+  const navOp2 = useTransform(currentSlide, (v) => Math.abs(2 - v) < 0.5 ? 1 : 0.2);
+  const navOp3 = useTransform(currentSlide, (v) => Math.abs(3 - v) < 0.5 ? 1 : 0.2);
+
+  const navCol0 = useTransform(currentSlide, (v) =>
+    Math.abs(0 - v) < 0.5 ? "#ffffff" : "rgba(255,255,255,0.35)"
   );
-  const navCol1 = useTransform(activeIndex, (current) =>
-    current === 1 ? "#ffffff" : "rgba(255,255,255,0.35)"
+  const navCol1 = useTransform(currentSlide, (v) =>
+    Math.abs(1 - v) < 0.5 ? "#ffffff" : "rgba(255,255,255,0.35)"
   );
-  const navCol2 = useTransform(activeIndex, (current) =>
-    current === 2 ? "#ffffff" : "rgba(255,255,255,0.35)"
+  const navCol2 = useTransform(currentSlide, (v) =>
+    Math.abs(2 - v) < 0.5 ? "#ffffff" : "rgba(255,255,255,0.35)"
   );
-  const navCol3 = useTransform(activeIndex, (current) =>
-    current === 3 ? "#ffffff" : "rgba(255,255,255,0.35)"
+  const navCol3 = useTransform(currentSlide, (v) =>
+    Math.abs(3 - v) < 0.5 ? "#ffffff" : "rgba(255,255,255,0.35)"
   );
 
   return {
-    imageOpacities: [img0, img1, img2, img3],
-    textOpacities: [txtOp0, txtOp1, txtOp2, txtOp3],
-    textYs: [txtY0, txtY1, txtY2, txtY3],
-    navOpacities: [navOp0, navOp1, navOp2, navOp3],
-    navColors: [navCol0, navCol1, navCol2, navCol3],
+    images: {
+      x: [imgX0, imgX1, imgX2, imgX3],
+      scale: [imgScale0, imgScale1, imgScale2, imgScale3],
+      opacity: [imgOpacity0, imgOpacity1, imgOpacity2, imgOpacity3],
+    },
+    titles: {
+      x: [titleX0, titleX1, titleX2, titleX3],
+      opacity: [titleOp0, titleOp1, titleOp2, titleOp3],
+    },
+    descriptions: {
+      x: [descX0, descX1, descX2, descX3],
+      opacity: [descOp0, descOp1, descOp2, descOp3],
+    },
+    nav: {
+      opacity: [navOp0, navOp1, navOp2, navOp3],
+      color: [navCol0, navCol1, navCol2, navCol3],
+    },
   };
 }
 
@@ -125,55 +173,32 @@ export default function Offerings() {
     margin: "-10% 0px -10% 0px",
   });
 
+  /* ------------------------------------------------------------------------ */
+  /*                            SCROLL PROGRESS                               */
+  /* ------------------------------------------------------------------------ */
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"],
+    offset: ["start start", "end start"],
   });
 
   /* ------------------------------------------------------------------------ */
-  /*                     ACTIVE INDEX — FIXED MAPPING                         */
+  /*                     SLIDE POSITION BASED ON SCROLL                       */
   /* ------------------------------------------------------------------------ */
-  /*
-    The section is 450vh tall. We want each offering to occupy an EQUAL
-    portion of that scroll distance:
-      - Offering 0: 0.0000 → 0.2500
-      - Offering 1: 0.2500 → 0.5000
-      - Offering 2: 0.5000 → 0.7500
-      - Offering 3: 0.7500 → 1.0000
 
-    Using Math.floor(progress * ITEM_COUNT) works for the first 3 items,
-    but when progress reaches exactly 1.0, progress * 4 = 4.0, floor = 4,
-    which clamps to 3. This means the last item "completes" at progress
-    ~0.9375 instead of 1.0.
-
-    FIX: Use a custom transform that maps the full [0,1] range properly.
-    We divide [0,1] into 4 equal segments and return the segment index.
-  */
-
-  const activeIndex = useTransform(scrollYProgress, (progress) => {
-    // Ensure we stay within [0, 1] even with floating point errors
-    const clamped = Math.max(0, Math.min(1, progress));
-    // Map to segment: 0-0.25→0, 0.25-0.5→1, 0.5-0.75→2, 0.75-1.0→3
-    const segment = Math.min(ITEM_COUNT - 1, Math.floor(clamped * ITEM_COUNT));
-    return segment;
-  });
+  const currentSlide = useTransform(scrollYProgress, (v) => v * ITEM_COUNT);
 
   // Counter text
-  const counterText = useTransform(activeIndex, (v) =>
-    `${String(v + 1).padStart(2, "0")} / ${String(ITEM_COUNT).padStart(2, "0")}`
-  );
+  const counterText = useTransform(scrollYProgress, (v) => {
+    const index = Math.min(ITEM_COUNT - 1, Math.floor(v * ITEM_COUNT));
+    return `${String(index + 1).padStart(2, "0")} / ${String(ITEM_COUNT).padStart(2, "0")}`;
+  });
 
   /* ------------------------------------------------------------------------ */
   /*                     PRE-COMPUTED MOTION VALUES                           */
   /* ------------------------------------------------------------------------ */
 
-  const {
-    imageOpacities,
-    textOpacities,
-    textYs,
-    navOpacities,
-    navColors,
-  } = useOfferingMotionValues(activeIndex);
+  const motionValues = useSlideMotionValues(currentSlide);
 
   /* ------------------------------------------------------------------------ */
   /*                            NAVIGATION                                     */
@@ -185,7 +210,6 @@ export default function Offerings() {
     const sectionTop = containerRef.current.offsetTop;
     const sectionHeight = containerRef.current.offsetHeight;
     const clampedIndex = Math.min(index, ITEM_COUNT - 1);
-    // Target the START of each segment so user can scroll through it
     const targetScroll = sectionTop + (sectionHeight * clampedIndex) / ITEM_COUNT;
 
     window.scrollTo({
@@ -206,17 +230,13 @@ export default function Offerings() {
     ? { duration: 0 }
     : { duration: 1.2, ease: EASE };
 
-  const imageTransition = prefersReducedMotion
+  const slideTransition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: 0.45, ease: EASE };
+    : { duration: 0.6, ease: EASE };
 
   const textTransition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: 0.45, delay: 0.08, ease: EASE };
-
-  const descTransition = prefersReducedMotion
-    ? { duration: 0 }
-    : { duration: 0.4, delay: 0.12, ease: EASE };
+    : { duration: 0.5, delay: 0.1, ease: EASE };
 
   /* ------------------------------------------------------------------------ */
   /*                              RENDER                                       */
@@ -252,14 +272,21 @@ export default function Offerings() {
               height: `${CARD_HEIGHT_VH}vh`,
             }}
           >
-            {/* Image Layers */}
+            {/* =========================================================== */}
+            {/*                    HORIZONTAL SLIDING IMAGES                */}
+            {/* =========================================================== */}
+
             <div className="absolute inset-0">
               {OFFERINGS.map((offering, index) => (
                 <motion.div
                   key={offering.title}
-                  style={{ opacity: imageOpacities[index] }}
-                  transition={imageTransition}
-                  className="absolute inset-0 will-change-[opacity]"
+                  style={{
+                    x: motionValues.images.x[index],
+                    scale: motionValues.images.scale[index],
+                    opacity: motionValues.images.opacity[index],
+                  }}
+                  transition={slideTransition}
+                  className="absolute inset-0 will-change-transform"
                 >
                   <Image
                     src={`/images/offerings/${offering.image}`}
@@ -269,14 +296,15 @@ export default function Offerings() {
                     loading={index === 0 ? "eager" : "lazy"}
                     sizes="(max-width: 768px) 100vw, 94vw"
                     quality={85}
-                    className="object-cover object-center brightness-[1.15] contrast-[1.02] saturate-[1.1] transition-transform duration-700"
+                    className="object-cover object-center brightness-[1.15] contrast-[1.02] saturate-[1.1]"
                   />
 
+                  {/* Overlay */}
                   <div
                     className="absolute inset-0"
                     style={{
                       background: `
-                        linear-gradient(to right, black 0%, rgba(0,0,0,0.05) ${GRADIENT_LEFT_WIDTH}, transparent 100%),
+                        linear-gradient(to right, black 0%, rgba(0,0,0,0.45) ${GRADIENT_LEFT_WIDTH}, transparent 100%),
                         linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 50%),
                         rgba(0,0,0,0.35)
                       `,
@@ -286,7 +314,10 @@ export default function Offerings() {
               ))}
             </div>
 
-            {/* Top CTA */}
+            {/* =========================================================== */}
+            {/*                         TOP CTA                           */}
+            {/* =========================================================== */}
+
             <div className="absolute top-10 right-12 z-30">
               <button
                 className="flex items-center gap-3 text-white text-[0.95rem] font-medium tracking-[-0.03em] transition-opacity duration-300 hover:opacity-70 cursor-pointer"
@@ -300,9 +331,15 @@ export default function Offerings() {
               </button>
             </div>
 
-            {/* Main Content */}
+            {/* =========================================================== */}
+            {/*                         MAIN CONTENT                        */}
+            {/* =========================================================== */}
+
             <div className="relative z-20 h-full flex flex-col justify-between">
-              {/* Text Area */}
+              {/* ======================================================= */}
+              {/*                         TEXT AREA                      */}
+              {/* ======================================================= */}
+
               <div className="flex-1 flex items-end">
                 <div className="w-full px-10 md:px-14 lg:px-16 pb-28">
                   {/* Counter */}
@@ -316,7 +353,7 @@ export default function Offerings() {
                     </motion.span>
                   </div>
 
-                  {/* Title */}
+                  {/* Title - Horizontal slide + fade */}
                   <div
                     className="relative overflow-hidden"
                     style={{ height: TEXT_CONTAINER_HEIGHT }}
@@ -325,8 +362,8 @@ export default function Offerings() {
                       <motion.h2
                         key={offering.title}
                         style={{
-                          opacity: textOpacities[index],
-                          y: textYs[index],
+                          x: motionValues.titles.x[index],
+                          opacity: motionValues.titles.opacity[index],
                         }}
                         transition={textTransition}
                         className="absolute inset-0 max-w-[560px] text-white text-[clamp(3rem,5vw,5.8rem)] leading-[0.9] font-semibold tracking-[-0.05em]"
@@ -336,7 +373,7 @@ export default function Offerings() {
                     ))}
                   </div>
 
-                  {/* Description */}
+                  {/* Description - Horizontal slide + fade */}
                   <div
                     className="relative overflow-hidden mt-1"
                     style={{ height: DESC_CONTAINER_HEIGHT }}
@@ -345,10 +382,10 @@ export default function Offerings() {
                       <motion.p
                         key={offering.title}
                         style={{
-                          opacity: textOpacities[index],
-                          y: textYs[index],
+                          x: motionValues.descriptions.x[index],
+                          opacity: motionValues.descriptions.opacity[index],
                         }}
-                        transition={descTransition}
+                        transition={textTransition}
                         className="absolute max-w-[540px] text-white text-[1.05rem] md:text-[1.15rem] leading-[1.5]"
                       >
                         {offering.description}
@@ -358,7 +395,10 @@ export default function Offerings() {
                 </div>
               </div>
 
-              {/* Bottom Nav */}
+              {/* ======================================================= */}
+              {/*                       BOTTOM NAV                       */}
+              {/* ======================================================= */}
+
               <div className="relative z-30 px-10 md:px-14 lg:px-16 pb-10">
                 <div className="grid grid-cols-4 gap-8">
                   {OFFERINGS.map((offering, index) => (
@@ -369,11 +409,11 @@ export default function Offerings() {
                       aria-label={`Go to ${offering.title}`}
                     >
                       <motion.div
-                        style={{ opacity: navOpacities[index] }}
+                        style={{ opacity: motionValues.nav.opacity[index] }}
                         className="h-px mb-4 bg-white transition-transform duration-300 group-hover:scale-x-105 origin-left"
                       />
                       <motion.div
-                        style={{ color: navColors[index] }}
+                        style={{ color: motionValues.nav.color[index] }}
                         className="text-[0.95rem] font-medium tracking-[-0.03em] transition-colors duration-300"
                       >
                         {offering.title}
@@ -383,7 +423,10 @@ export default function Offerings() {
                 </div>
               </div>
 
-              {/* CTA Button */}
+              {/* ======================================================= */}
+              {/*                         CTA BUTTON                     */}
+              {/* ======================================================= */}
+
               <div className="absolute right-10 bottom-24 z-30">
                 <button
                   className="w-[62px] h-[62px] rounded-full bg-[#A5A5A5] flex items-center justify-center text-white text-[2rem] transition-transform duration-300 hover:scale-105 cursor-pointer"
