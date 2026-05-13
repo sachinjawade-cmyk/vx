@@ -245,7 +245,7 @@ export default function Offerings() {
   return (
     <section
       ref={containerRef}
-      className="relative bg-[#ffffff]"
+      className="relative bg-[#131313]"
       style={{ height: `${SECTION_HEIGHT_VH}vh` }}
       aria-label="Our offerings"
       role="region"
