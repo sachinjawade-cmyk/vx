@@ -7,6 +7,7 @@ import Projects from "@/components/Projects";
 import Offerings from "@/components/Offerings";
 import Philosophy from "@/components/Philosophy";
 import Partners from "@/components/Partners";
+import Work from "@/components/Work";
 import { useScroll } from "framer-motion";
 
 export default function Home() {
@@ -37,6 +38,8 @@ export default function Home() {
       <Partners />
 
       <Offerings />
+
+      <Work />
       
       <footer className="py-12 border-t border-neutral-900 text-center text-neutral-500 text-sm bg-[#121212]">
         <p>© {new Date().getFullYear()} John Doe. Built with Next.js & Framer Motion.</p>
