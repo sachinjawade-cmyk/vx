@@ -31,7 +31,7 @@ const BLOCKS = [
 /*                               CONFIGURATION                                */
 /* -------------------------------------------------------------------------- */
 
-const BACKGROUND_COLOR = "#131313";
+const BACKGROUND_COLOR = "#000000";
 const SECTION_HEIGHT = "400vh";
 const CONTENT_Y_ENTER = 80;
 const CONTENT_Y_EXIT = -80;

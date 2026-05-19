@@ -28,7 +28,7 @@ const PARTNERS = [
 /*                              SECTION CONFIG                                */
 /* -------------------------------------------------------------------------- */
 
-const SECTION_BACKGROUND = "#131313";
+const SECTION_BACKGROUND = "#000000";
 
 const CINEMATIC_EASE = [
   0.22,

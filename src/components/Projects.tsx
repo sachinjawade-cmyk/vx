@@ -14,7 +14,6 @@ import { useRef } from "react";
 /* -------------------------------------------------------------------------- */
 
 const headlineLines = [
-  //"Four ways",
   "We bring ideas",
   "to life.",
 ];
@@ -43,10 +42,10 @@ const CINEMATIC_EASE = [0.22, 1, 0.36, 1] as const;
 /*                                   STYLES                                   */
 /* -------------------------------------------------------------------------- */
 
-const SECTION_BACKGROUND = "#131313";
+const SECTION_BACKGROUND = "#000000";
 
 const SECTION_GRADIENT =
-  "linear-gradient(180deg, rgba(19, 19, 19, 0.00) 50%, rgba(19, 19, 19, 0.00) 50%, rgba(19, 19, 19, 0.04) 56.5%, rgba(19, 19, 19, 0.13) 62.5%, rgba(19, 19, 19, 0.26) 67.5%, rgba(19, 19, 19, 0.42) 72.5%, rgba(19, 19, 19, 0.58) 77.5%, rgba(19, 19, 19, 0.74) 82.5%, rgba(19, 19, 19, 0.87) 87.5%, rgba(19, 19, 19, 0.96) 93.5%, #131313 100%)";
+  "linear-gradient(180deg, rgba(19, 19, 19, 0.00) 50%, rgba(19, 19, 19, 0.00) 50%, rgba(19, 19, 19, 0.04) 56.5%, rgba(19, 19, 19, 0.13) 62.5%, rgba(19, 19, 19, 0.26) 67.5%, rgba(19, 19, 19, 0.42) 72.5%, rgba(19, 19, 19, 0.58) 77.5%, rgba(19, 19, 19, 0.74) 82.5%, rgba(19, 19, 19, 0.87) 87.5%, rgba(19, 19, 19, 0.96) 93.5%, #000000 100%)";
 
 export default function Projects() {
   const sectionRef = useRef(null);
@@ -65,17 +64,32 @@ export default function Projects() {
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end start"],
+    offset: ["start end", "end start"],
   });
 
   /* ------------------------------------------------------------------------ */
   /*                            CINEMATIC PARALLAX                            */
   /* ------------------------------------------------------------------------ */
 
+  // Parallax movement: section slides up as user scrolls
   const smoothY = useTransform(
     scrollYProgress,
     [0, 1],
     [PARALLAX_Y_START, PARALLAX_Y_END]
+  );
+
+  // Scale effect: slight zoom as it comes into view
+  const scale = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.7, 1],
+    [0.95, 1, 1, 0.98]
+  );
+
+  // Opacity for content fade
+  const contentOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.15, 0.85, 1],
+    [0, 1, 1, 0]
   );
 
   return (
@@ -109,7 +123,11 @@ export default function Projects() {
         {/* --------------------------------------------------------------- */}
 
         <motion.div
-          style={{ y: smoothY }}
+          style={{
+            y: smoothY,
+            scale: scale,
+            opacity: contentOpacity
+          }}
           className="max-w-7xl mx-auto relative z-10 w-full"
         >
           {/* ----------------------------------------------------------- */}
