@@ -14,7 +14,7 @@ import { useScroll } from "framer-motion";
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   // Track scroll specifically over the 500vh container
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -43,10 +43,10 @@ export default function Home() {
 
       <Work />
 
+      <Industries />
+
       <Partners />
 
-      <Industries />
-      
       <footer className="py-12 border-t border-neutral-900 text-center text-neutral-500 text-sm bg-[#121212]">
         <p>© {new Date().getFullYear()} John Doe. Built with Next.js & Framer Motion.</p>
       </footer>
