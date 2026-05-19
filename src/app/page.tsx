@@ -37,13 +37,13 @@ export default function Home() {
 
       <Philosophy />
 
-      <Partners />
-
       <Offerings />
 
       <Clients />
 
       <Work />
+
+      <Partners />
 
       <Industries />
       
