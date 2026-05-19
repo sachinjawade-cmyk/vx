@@ -73,8 +73,7 @@ const fadeUp = {
 /* -------------------------------------------------------------------------- */
 
 export default function Partners() {
-  const sectionRef =
-    useRef<HTMLDivElement>(null);
+  const sectionRef = useRef(null);
 
   const isVisible =
     useInView(sectionRef, {
@@ -305,50 +304,35 @@ export default function Partners() {
         <motion.a
           variants={fadeUp}
           href="#"
-          className="
-            group
-            relative
-
-            text-[#F5F2EB]
-
-            text-sm
-            md:text-[15px]
-
-            uppercase
-
-            tracking-[0.14em]
-
-            font-medium
-
-            pb-1
-
-            hover:opacity-70
-
-            transition-opacity
-            duration-500
-          "
+          className="group relative inline-flex items-center cursor-pointer"
         >
-          Join our partner network
+          {/* Text with underline animation */}
+          <span className="relative text-sm md:text-[15px] uppercase tracking-[0.14em] font-medium text-[#F5F2EB] transition-colors duration-300">
+            Join our partner network
+            {/* Underline - hidden by default, reveals from left to right on hover */}
+            <span
+              className="pointer-events-none absolute left-0 top-[1.5em] h-[0.05em] w-full bg-current content-['']
+              origin-right scale-x-0 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+              group-hover:origin-left group-hover:scale-x-100"
+            />
+          </span>
 
-          <span
-            className="
-              absolute
-              left-0
-              bottom-0
-
-              w-full
-              h-px
-
-              bg-[#F5F2EB]
-
-              origin-left
-
-              transition-transform
-              duration-500
-
-              group-hover:scale-x-0
-            "
-          />
+          {/* Arrow icon - fades in and slides up on hover */}
+          <svg
+            className="ml-[0.3em] mt-[0.1em] size-[0.65em] translate-y-1 opacity-0 transition-all duration-300 [motion-reduce:transition-none] group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none"
+            fill="none"
+            viewBox="0 0 12 12"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              d="M1.5 10.5L10.5 1.5M10.5 1.5V9M10.5 1.5H3"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </motion.a>
       </motion.div>
     </section>

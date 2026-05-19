@@ -58,6 +58,10 @@ const ENTRY_MARGIN = "-10% 0px -10% 0px";
 /*                               READ MORE CTA                                */
 /* -------------------------------------------------------------------------- */
 
+/* -------------------------------------------------------------------------- */
+/*                               READ MORE CTA                                */
+/* -------------------------------------------------------------------------- */
+
 function ReadMoreCTA() {
   return (
     <motion.a
@@ -66,28 +70,31 @@ function ReadMoreCTA() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, ease: EASE, delay: 0.4 }}
-      className="group inline-flex items-center gap-3 mt-6 cursor-pointer"
+      className="group relative inline-flex items-center mt-6 cursor-pointer"
     >
+      {/* Text with underline animation */}
       <span className="relative text-xs uppercase tracking-[0.2em] text-[#888888] font-medium transition-colors duration-300 group-hover:text-[#F5F2EB]">
         Read More
-        {/* Underline */}
-        <span className="absolute left-0 -bottom-1 w-full h-px bg-[#555555] transition-all duration-300 group-hover:bg-[#F5F2EB]" />
-        {/* Hover underline animation */}
-        <span className="absolute left-0 -bottom-1 w-0 h-px bg-[#F5F2EB] transition-all duration-500 ease-out group-hover:w-full" />
+        {/* Underline - hidden by default, reveals from left to right on hover */}
+        <span
+          className="pointer-events-none absolute left-0 top-[1.5em] h-[0.05em] w-full bg-current content-['']
+          origin-right scale-x-0 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+          group-hover:origin-left group-hover:scale-x-100"
+        />
       </span>
 
-      {/* Arrow icon */}
+      {/* Arrow icon - fixed viewBox to prevent cutoff */}
       <svg
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
+        className="ml-[0.3em] mt-[0.1em] size-[0.65em] translate-y-1 opacity-0 transition-all duration-300 [motion-reduce:transition-none] group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none"
         fill="none"
-        className="text-[#888888] transition-all duration-300 group-hover:text-[#F5F2EB] group-hover:translate-x-1"
+        viewBox="0 0 12 12"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
         <path
-          d="M3 8H13M13 8L9 4M13 8L9 12"
+          d="M1.5 10.5L10.5 1.5M10.5 1.5V9M10.5 1.5H3"
           stroke="currentColor"
-          strokeWidth="1.2"
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
         />

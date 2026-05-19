@@ -6,11 +6,9 @@ import {
   useTransform,
   useInView,
   useMotionValueEvent,
-  animate,
-  useMotionValue,
 } from "framer-motion";
 
-import { useRef, useCallback, useState, useEffect } from "react";
+import { useRef, useCallback, useState } from "react";
 import Image from "next/image";
 
 /* -------------------------------------------------------------------------- */
@@ -91,11 +89,6 @@ export default function Offerings() {
   /* ------------------------------------------------------------------------ */
   /*                     SNAP TO SLIDE ON SCROLL                              */
   /* ------------------------------------------------------------------------ */
-  /*
-    Instead of continuous horizontal sliding, we snap to discrete slides.
-    Each slide occupies exactly 1/ITEM_COUNT of the scroll range.
-    When scroll crosses a threshold, we animate to the next/previous slide.
-  */
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     const newIndex = Math.min(
@@ -137,13 +130,13 @@ export default function Offerings() {
     ? { duration: 0 }
     : { duration: 1.2, ease: EASE };
 
-  const slideTransition = prefersReducedMotion
+  const imageTransition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: 0.7, ease: EASE };
+    : { duration: 1.2, ease: EASE };
 
   const textTransition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: 0.5, delay: 0.08, ease: EASE };
+    : { duration: 0.6, delay: 0.15, ease: EASE };
 
   /* ------------------------------------------------------------------------ */
   /*                              RENDER                                       */
@@ -174,30 +167,22 @@ export default function Offerings() {
           {/* FULL SCREEN CONTAINER */}
           <div className="relative w-full h-full overflow-hidden bg-black">
             {/* =========================================================== */}
-            {/*                    FULL-SCREEN SLIDING IMAGES               */}
+            {/*                    FULL-SCREEN FADE + SCALE IMAGES          */}
             {/* =========================================================== */}
-            {/*
-              Each image is positioned absolutely and fills the entire viewport.
-              Active slide: x = 0 (fully visible, centered)
-              Next slides: x = "100%" (waiting to the right)
-              Previous slides: x = "-100%" (exited to the left)
-              No partial positions — always full width/height.
-            */}
 
             <div className="absolute inset-0">
               {OFFERINGS.map((offering, index) => {
                 const isActive = index === activeIndex;
-                const isBefore = index < activeIndex;
-                const isAfter = index > activeIndex;
 
                 return (
                   <motion.div
                     key={offering.title}
                     initial={false}
                     animate={{
-                      x: isActive ? "0%" : isBefore ? "-100%" : "100%",
+                      opacity: isActive ? 1 : 0,
+                      scale: isActive ? 1 : 1.15,
                     }}
-                    transition={slideTransition}
+                    transition={imageTransition}
                     className="absolute inset-0 will-change-transform"
                   >
                     <Image
@@ -266,22 +251,21 @@ export default function Offerings() {
                     </span>
                   </div>
 
-                  {/* Title - Slide in from right, exit to left */}
+                  {/* Title - Fade + slide up */}
                   <div
                     className="relative overflow-hidden"
                     style={{ height: TEXT_CONTAINER_HEIGHT }}
                   >
                     {OFFERINGS.map((offering, index) => {
                       const isActive = index === activeIndex;
-                      const isBefore = index < activeIndex;
 
                       return (
                         <motion.h2
                           key={offering.title}
                           initial={false}
                           animate={{
-                            x: isActive ? "0%" : isBefore ? "-60px" : "60px",
                             opacity: isActive ? 1 : 0,
+                            y: isActive ? 0 : 30,
                           }}
                           transition={textTransition}
                           className="absolute inset-0 max-w-[600px] text-white text-[clamp(3rem,5.5vw,6.5rem)] leading-[0.9] font-semibold tracking-[-0.05em]"
@@ -292,24 +276,26 @@ export default function Offerings() {
                     })}
                   </div>
 
-                  {/* Description - Slide in from right, exit to left */}
+                  {/* Description - Fade + slide up */}
                   <div
                     className="relative overflow-hidden mt-2"
                     style={{ height: DESC_CONTAINER_HEIGHT }}
                   >
                     {OFFERINGS.map((offering, index) => {
                       const isActive = index === activeIndex;
-                      const isBefore = index < activeIndex;
 
                       return (
                         <motion.p
                           key={offering.title}
                           initial={false}
                           animate={{
-                            x: isActive ? "0%" : isBefore ? "-40px" : "40px",
                             opacity: isActive ? 1 : 0,
+                            y: isActive ? 0 : 20,
                           }}
-                          transition={textTransition}
+                          transition={{
+                            ...textTransition,
+                            delay: isActive ? 0.25 : 0,
+                          }}
                           className="absolute max-w-[500px] text-white/90 text-[1.1rem] md:text-[1.2rem] leading-[1.5]"
                         >
                           {offering.description}
