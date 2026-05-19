@@ -5,6 +5,13 @@ import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 
 /* -------------------------------------------------------------------------- */
+/*                            CONFIGURATION                                   */
+/* -------------------------------------------------------------------------- */
+
+const TEXT_COLUMN_WIDTH = "40%";
+const IMAGE_COLUMN_WIDTH = "60%";
+
+/* -------------------------------------------------------------------------- */
 /*                                   CONTENT                                  */
 /* -------------------------------------------------------------------------- */
 
@@ -14,14 +21,14 @@ const WORKS = [
     description:
       "A fully immersive VR Experience of Varanasi, a futuristic ropeway.",
     image: "/images/work/Varanasi.png",
-    align: "right" as const, // image on right, text on left
+    align: "right" as const,
   },
   {
     title: "Adani Centre of Excellence: Immersive Mining Education Experience",
     description:
       "Photorealistic digital simulation with audio, interaction, and mining topic demonstrations.",
     image: "/images/work/Adani.png",
-    align: "left" as const, // image on left, text on right
+    align: "left" as const,
   },
   {
     title: "Holographic Digital Twin for Noida International Airport",
@@ -48,6 +55,48 @@ const SECTION_BACKGROUND = "#131313";
 const ENTRY_MARGIN = "-10% 0px -10% 0px";
 
 /* -------------------------------------------------------------------------- */
+/*                               READ MORE CTA                                */
+/* -------------------------------------------------------------------------- */
+
+function ReadMoreCTA() {
+  return (
+    <motion.a
+      href="#"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: EASE, delay: 0.4 }}
+      className="group inline-flex items-center gap-3 mt-6 cursor-pointer"
+    >
+      <span className="relative text-xs uppercase tracking-[0.2em] text-[#888888] font-medium transition-colors duration-300 group-hover:text-[#F5F2EB]">
+        Read More
+        {/* Underline */}
+        <span className="absolute left-0 -bottom-1 w-full h-px bg-[#555555] transition-all duration-300 group-hover:bg-[#F5F2EB]" />
+        {/* Hover underline animation */}
+        <span className="absolute left-0 -bottom-1 w-0 h-px bg-[#F5F2EB] transition-all duration-500 ease-out group-hover:w-full" />
+      </span>
+
+      {/* Arrow icon */}
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        className="text-[#888888] transition-all duration-300 group-hover:text-[#F5F2EB] group-hover:translate-x-1"
+      >
+        <path
+          d="M3 8H13M13 8L9 4M13 8L9 12"
+          stroke="currentColor"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </motion.a>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*                               WORK ITEM                                    */
 /* -------------------------------------------------------------------------- */
 
@@ -60,7 +109,7 @@ interface WorkItemProps {
 }
 
 function WorkItem({ title, description, image, align, index }: WorkItemProps) {
-  const itemRef = useRef<HTMLDivElement>(null);
+  const itemRef = useRef(null);
 
   const isVisible = useInView(itemRef, {
     margin: ENTRY_MARGIN,
@@ -98,27 +147,48 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
     },
   };
 
-  const labelVariant = {
-    hidden: { opacity: 0, y: 16 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1,
-        ease: EASE,
-        delay: 0.1,
-      },
-    },
-  };
-
-  /* Image is offset right or left; text fills the opposite column */
   const imageOnLeft = align === "left";
 
   return (
     <div
       ref={itemRef}
-      className="relative grid grid-cols-1 lg:grid-cols-2 gap-0 items-center"
+      className="relative flex flex-col lg:flex-row items-stretch gap-0 py-16 lg:py-8"
     >
+      {/* ==================== TEXT COLUMN ==================== */}
+
+      <div
+        className={`w-full lg:w-[${TEXT_COLUMN_WIDTH}] flex flex-col justify-end px-6 md:px-8 lg:px-12 pb-8 lg:pb-0 ${imageOnLeft ? "lg:order-2" : "lg:order-1"
+          }`}
+      >
+        <motion.h3
+          variants={textVariant}
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+          className="text-[clamp(1.6rem,3vw,2.6rem)] leading-[1.15] font-semibold tracking-[-0.025em] text-[#F5F2EB] mb-5"
+        >
+          {title}
+        </motion.h3>
+
+        <motion.p
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { duration: 1.1, ease: EASE, delay: 0.32 },
+            },
+          }}
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+          className="text-[#888888] text-sm md:text-base leading-[1.7] max-w-[380px]"
+        >
+          {description}
+        </motion.p>
+
+        {/* Read More CTA */}
+        <ReadMoreCTA />
+      </div>
+
       {/* ==================== IMAGE COLUMN ==================== */}
 
       <motion.div
@@ -126,13 +196,10 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
         initial="hidden"
         animate={isVisible ? "visible" : "hidden"}
         whileHover="hover"
-        className={`relative overflow-hidden group cursor-pointer ${imageOnLeft ? "lg:order-1" : "lg:order-2"
+        className={`w-full lg:w-[${IMAGE_COLUMN_WIDTH}] relative overflow-hidden group cursor-pointer ${imageOnLeft ? "lg:order-1" : "lg:order-2"
           }`}
       >
-        {/* Aspect ratio wrapper */}
-        <div className="relative w-full aspect-[4/3] overflow-hidden">
-
-          {/* Main Image */}
+        <div className="relative w-full aspect-[16/9] overflow-hidden">
           <motion.div
             variants={{
               hover: {
@@ -149,18 +216,12 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
               src={image}
               alt={title}
               fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="
-          object-cover
-          transition-all
-          duration-700
-          group-hover:brightness-110
-        "
+              sizes="(max-width: 1024px) 100vw, 60vw"
+              className="object-cover transition-all duration-700 group-hover:brightness-110"
               priority={index === 0}
             />
           </motion.div>
 
-          {/* Cinematic Gradient Overlay */}
           <motion.div
             variants={{
               hover: {
@@ -168,18 +229,9 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
               },
             }}
             transition={{ duration: 0.8 }}
-            className="
-        absolute inset-0
-        bg-gradient-to-t
-        from-black/50
-        via-black/10
-        to-transparent
-        opacity-40
-        pointer-events-none
-      "
+            className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-40 pointer-events-none"
           />
 
-          {/* Premium Glow */}
           <motion.div
             variants={{
               hover: {
@@ -187,85 +239,10 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
               },
             }}
             transition={{ duration: 0.8 }}
-            className="
-        absolute inset-0
-        opacity-0
-        pointer-events-none
-        bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_70%)]
-      "
-          />
-
-          {/* Optional Border Glow */}
-          <motion.div
-            variants={{
-              hover: {
-                opacity: 1,
-              },
-            }}
-            transition={{ duration: 0.5 }}
-            className="
-        absolute inset-0
-        border border-white/10
-        opacity-0
-        pointer-events-none
-      "
+            className="absolute inset-0 opacity-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_70%)]"
           />
         </div>
       </motion.div>
-      {/* ==================== TEXT COLUMN ==================== */}
-
-      <div
-        className={`
-          flex flex-col justify-center
-          px-4 md:px-6 lg:px-8
-          py-12 lg:py-0
-          ${imageOnLeft ? "lg:order-2" : "lg:order-1"}
-        `}
-      >
-        {/* Index label */}
-        <motion.span
-          variants={labelVariant}
-          initial="hidden"
-          animate={isVisible ? "visible" : "hidden"}
-          className="text-xs uppercase tracking-[0.22em] text-[#555555] mb-5 font-light"
-        >
-
-        </motion.span>
-
-        {/* Title */}
-        <motion.h3
-          variants={textVariant}
-          initial="hidden"
-          animate={isVisible ? "visible" : "hidden"}
-          className="
-            text-[clamp(1.6rem,3vw,2.6rem)]
-            leading-[1.1]
-            font-semibold
-            tracking-[-0.025em]
-            text-[#F5F2EB]
-            mb-5
-          "
-        >
-          {title}
-        </motion.h3>
-
-        {/* Description */}
-        <motion.p
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: { duration: 1.1, ease: EASE, delay: 0.32 },
-            },
-          }}
-          initial="hidden"
-          animate={isVisible ? "visible" : "hidden"}
-          className="text-[#666666] text-sm md:text-base leading-[1.7] max-w-[380px]"
-        >
-          {description}
-        </motion.p>
-      </div>
     </div>
   );
 }
@@ -275,7 +252,7 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
 /* -------------------------------------------------------------------------- */
 
 export default function Work() {
-  const headerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef(null);
   const isHeaderVisible = useInView(headerRef, {
     margin: ENTRY_MARGIN,
     once: true,
@@ -292,17 +269,6 @@ export default function Work() {
         ref={headerRef}
         className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-20 text-center"
       >
-        {/* Eyebrow */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={isHeaderVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 1, ease: EASE }}
-          className="text-xs uppercase tracking-[0.22em] text-[#555555] mb-6 font-light"
-        >
-          Selected Work
-        </motion.p>
-
-        {/* Main title */}
         <div className="overflow-hidden">
           <motion.h2
             initial={{ opacity: 0, y: 60 }}
@@ -310,20 +276,12 @@ export default function Work() {
               isHeaderVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }
             }
             transition={{ duration: 1.4, ease: EASE, delay: 0.1 }}
-            className="
-              text-[clamp(2.4rem,6vw,5.5rem)]
-              font-semibold
-              tracking-[-0.04em]
-              text-[#F5F2EB]
-              leading-[1.0]
-              mb-6
-            "
+            className="text-[clamp(2.4rem,6vw,5.5rem)] font-semibold tracking-[-0.04em] text-[#F5F2EB] leading-[1.0] mb-6"
           >
             The Worlds We&apos;ve Built
           </motion.h2>
         </div>
 
-        {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={
@@ -355,12 +313,6 @@ export default function Work() {
               align={work.align}
               index={index}
             />
-            {/* Divider between items */}
-            {index < WORKS.length - 1 && (
-              <div className="px-6 md:px-12">
-                <div className="h-px bg-[#1E1E1E] w-full" />
-              </div>
-            )}
           </div>
         ))}
       </div>
