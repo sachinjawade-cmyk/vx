@@ -125,29 +125,99 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
         variants={imageVariant}
         initial="hidden"
         animate={isVisible ? "visible" : "hidden"}
-        className={`relative overflow-hidden ${imageOnLeft ? "lg:order-1" : "lg:order-2"}`}
+        whileHover="hover"
+        className={`relative overflow-hidden group cursor-pointer ${imageOnLeft ? "lg:order-1" : "lg:order-2"
+          }`}
       >
         {/* Aspect ratio wrapper */}
-        <div className="relative w-full aspect-[4/3]">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
-            priority={index === 0}
+        <div className="relative w-full aspect-[4/3] overflow-hidden">
+
+          {/* Main Image */}
+          <motion.div
+            variants={{
+              hover: {
+                scale: 1.06,
+                transition: {
+                  duration: 1.2,
+                  ease: EASE,
+                },
+              },
+            }}
+            className="w-full h-full"
+          >
+            <Image
+              src={image}
+              alt={title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="
+          object-cover
+          transition-all
+          duration-700
+          group-hover:brightness-110
+        "
+              priority={index === 0}
+            />
+          </motion.div>
+
+          {/* Cinematic Gradient Overlay */}
+          <motion.div
+            variants={{
+              hover: {
+                opacity: 0.7,
+              },
+            }}
+            transition={{ duration: 0.8 }}
+            className="
+        absolute inset-0
+        bg-gradient-to-t
+        from-black/50
+        via-black/10
+        to-transparent
+        opacity-40
+        pointer-events-none
+      "
           />
-          {/* Subtle inner vignette */}
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+
+          {/* Premium Glow */}
+          <motion.div
+            variants={{
+              hover: {
+                opacity: 1,
+              },
+            }}
+            transition={{ duration: 0.8 }}
+            className="
+        absolute inset-0
+        opacity-0
+        pointer-events-none
+        bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_70%)]
+      "
+          />
+
+          {/* Optional Border Glow */}
+          <motion.div
+            variants={{
+              hover: {
+                opacity: 1,
+              },
+            }}
+            transition={{ duration: 0.5 }}
+            className="
+        absolute inset-0
+        border border-white/10
+        opacity-0
+        pointer-events-none
+      "
+          />
         </div>
       </motion.div>
-
       {/* ==================== TEXT COLUMN ==================== */}
 
       <div
         className={`
           flex flex-col justify-center
-          px-8 md:px-14 lg:px-16
+          px-4 md:px-6 lg:px-8
           py-12 lg:py-0
           ${imageOnLeft ? "lg:order-2" : "lg:order-1"}
         `}
@@ -159,7 +229,7 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
           animate={isVisible ? "visible" : "hidden"}
           className="text-xs uppercase tracking-[0.22em] text-[#555555] mb-5 font-light"
         >
-          {String(index + 1).padStart(2, "0")} / {String(WORKS.length).padStart(2, "0")}
+
         </motion.span>
 
         {/* Title */}

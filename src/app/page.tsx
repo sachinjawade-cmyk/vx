@@ -8,6 +8,7 @@ import Offerings from "@/components/Offerings";
 import Philosophy from "@/components/Philosophy";
 import Partners from "@/components/Partners";
 import Work from "@/components/Work";
+import Clients from "@/components/Clients";
 import { useScroll } from "framer-motion";
 
 export default function Home() {
@@ -38,6 +39,8 @@ export default function Home() {
       <Partners />
 
       <Offerings />
+
+      <Clients />
 
       <Work />
       
