@@ -254,7 +254,7 @@ export default function Industries() {
 
           {/* ============== CENTRE: Image rail ============== */}
 
-          <div className="flex-1 min-w-0 relative overflow-hidden rounded-lg">
+          <div className="flex-1 min-w-0 relative overflow-hidden rounded-2xl">
             <motion.div
               style={{
                 y: railY,

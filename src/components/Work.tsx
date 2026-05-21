@@ -206,7 +206,7 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
         className={`w-full lg:w-[${IMAGE_COLUMN_WIDTH}] relative overflow-hidden group cursor-pointer ${imageOnLeft ? "lg:order-1" : "lg:order-2"
           }`}
       >
-        <div className="relative w-full aspect-[16/9] overflow-hidden">
+        <div className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl">
           <motion.div
             variants={{
               hover: {
