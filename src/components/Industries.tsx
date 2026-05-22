@@ -54,7 +54,7 @@ const STATS = [
 /* -------------------------------------------------------------------------- */
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-const SECTION_BG = "#0A0A0A";
+const SECTION_BG = "#FFFFFF";
 const SCROLL_MULTIPLIER = 4;
 
 /* -------------------------------------------------------------------------- */
@@ -105,11 +105,11 @@ function StatItem({
       transition={{ duration: 0.8, ease: EASE, delay }}
       className="flex flex-col"
     >
-      <span className="text-[clamp(2.5rem,4vw,4rem)] font-semibold tracking-[-0.03em] text-[#F5F2EB] leading-none">
+      <span className="text-[clamp(2.5rem,4vw,4rem)] font-semibold tracking-[-0.03em] text-[#131313] leading-none">
         {count}
         {suffix}
       </span>
-      <span className="text-[#666666] text-sm mt-2 tracking-wide">{label}</span>
+      <span className="text-[#9A9FA1] text-sm mt-2 tracking-wide">{label}</span>
     </motion.div>
   );
 }
@@ -208,7 +208,7 @@ export default function Industries() {
             initial={{ opacity: 0, y: 40 }}
             animate={isHeaderVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 1.2, ease: EASE, delay: 0.08 }}
-            className="text-[clamp(2.5rem,6vw,5rem)] font-semibold tracking-[-0.04em] text-[#F5F2EB] leading-[1.0]"
+            className="text-[clamp(2.5rem,6vw,5rem)] font-semibold tracking-[-0.04em] text-[#131313] leading-[1.0]"
           >
             Where We Belong
           </motion.h2>
@@ -216,7 +216,7 @@ export default function Industries() {
             initial={{ opacity: 0, y: 20 }}
             animate={isHeaderVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 1, ease: EASE, delay: 0.18 }}
-            className="text-[#666666] text-base md:text-lg mt-4"
+            className="text-[#A47764] text-base md:text-lg mt-4"
           >
             Transforming industries through immersive technology.
           </motion.p>
@@ -224,7 +224,7 @@ export default function Industries() {
 
         {/* ======================== MAIN BODY ======================== */}
 
-        <div className="flex-1 flex max-w-7xl mx-auto w-full px-6 md:px-16 pb-10 gap-8 md:gap-12">
+        <div className="flex-1 flex max-w-7xl mx-auto w-full px-6 md:px-16 pb-10 gap-8 md:gap-24">
 
           {/* ============== LEFT: Industry text ============== */}
 
@@ -239,13 +239,13 @@ export default function Industries() {
                 transition={{ duration: 0.6, ease: EASE }}
                 className="absolute inset-0 flex flex-col justify-center"
               >
-                <span className="text-[11px] uppercase tracking-[0.2em] text-[#555555] block mb-6">
+                <span className="text-[11px] uppercase tracking-[0.2em] text-[#A47764] block mb-6">
                   {ind.index} / {String(total).padStart(2, "0")}
                 </span>
-                <h3 className="text-[clamp(1.4rem,2.4vw,2.2rem)] font-semibold text-[#F5F2EB] leading-[1.15] tracking-[-0.02em] whitespace-pre-line mb-5">
+                <h3 className="text-[clamp(1.4rem,2.4vw,2.2rem)] font-semibold text-[#131313] leading-[1.15] tracking-[-0.02em] whitespace-pre-line mb-5">
                   {ind.name}
                 </h3>
-                <p className="text-[#777777] text-sm md:text-base leading-[1.6] max-w-[260px]">
+                <p className="text-[#9A9FA1] text-sm md:text-base leading-[1.6] max-w-[260px]">
                   {ind.description}
                 </p>
               </motion.div>
@@ -277,7 +277,7 @@ export default function Industries() {
                     className="object-cover"
                     priority={i === 0}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent pointer-events-none" />
                 </div>
               ))}
             </motion.div>
@@ -314,7 +314,7 @@ export default function Industries() {
                 opacity: activeIndex === i ? 1 : 0.3,
               }}
               transition={{ duration: 0.4, ease: EASE }}
-              className="h-[3px] rounded-full bg-[#F5F2EB]"
+              className="h-[3px] rounded-full bg-[#131313]"
             />
           ))}
         </div>

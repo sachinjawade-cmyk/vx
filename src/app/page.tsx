@@ -4,13 +4,16 @@ import { useRef } from "react";
 import ScrollyCanvas from "@/components/ScrollyCanvas";
 import Overlay from "@/components/Overlay";
 import Projects from "@/components/Projects";
-import Offerings from "@/components/Offerings";
-import Philosophy from "@/components/Philosophy";
+
 import Partners from "@/components/Partners";
 import Work from "@/components/Work";
 import Clients from "@/components/Clients";
 import Industries from "@/components/Industries";
 import CTA from "@/components/CTA";
+import Blog from "@/components/Blog";
+import InquirySection from "@/components/InquirySection";
+import Citations from "@/components/Citations";
+import Footer from "@/components/Footer";
 import { useScroll } from "framer-motion";
 
 export default function Home() {
@@ -36,9 +39,7 @@ export default function Home() {
       {/* Renders after the scroll sequence finishes */}
       <Projects />
 
-      <Philosophy />
-
-      <Offerings />
+      <Citations />
 
       <Clients />
 
@@ -50,9 +51,11 @@ export default function Home() {
 
       <CTA />
 
-      <footer className="py-12 border-t border-neutral-900 text-center text-neutral-500 text-sm bg-[#121212]">
-        <p>© {new Date().getFullYear()} John Doe. Built with Next.js & Framer Motion.</p>
-      </footer>
+      <Blog />
+
+      <InquirySection />
+
+      <Footer />
     </main>
   );
 }

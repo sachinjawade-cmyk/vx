@@ -1,363 +1,297 @@
 "use client";
 
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useInView,
-  useMotionValueEvent,
-} from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { useRef } from "react";
 
-import { useRef, useCallback, useState } from "react";
-import Image from "next/image";
+const DEBUG = true;
 
-/* -------------------------------------------------------------------------- */
-/*                                   TYPES                                    */
-/* -------------------------------------------------------------------------- */
+const SMOOTH_SCROLL_CONFIG = {
+  stiffness: 90,
+  damping: 22,
+  mass: 0.35,
+};
 
-interface Offering {
-  title: string;
-  description: string;
-  image: string;
-}
-
-/* -------------------------------------------------------------------------- */
-/*                                   CONTENT                                  */
-/* -------------------------------------------------------------------------- */
-
-const OFFERINGS: Offering[] = [
-  {
-    title: "Immersive Experience Centres",
-    description:
-      "Permanent spaces that tell stories, engage visitors, and leave a lasting impact.",
-    image: "immersive-experience.png",
-  },
-  {
-    title: "Simulation-Based Learning",
-    description:
-      "Immersive training that replaces dangerous or expensive physical practice.",
-    image: "simulation-learning.png",
-  },
-  {
-    title: "Event & Brand Activation",
-    description:
-      "Immersive brand moments for events, expos, and product launches.",
-    image: "event-brand-experience.png",
-  },
-  {
-    title: "Digital Experiences",
-    description:
-      "Websites and digital environments built with 3D, motion and immersive storytelling.",
-    image: "digital-experiences.png",
-  },
-];
-
-/* -------------------------------------------------------------------------- */
-/*                                  SETTINGS                                  */
-/* -------------------------------------------------------------------------- */
-
-const ITEM_COUNT = OFFERINGS.length;
-const SECTION_HEIGHT_VH = 400;
-const EASE = [0.22, 1, 0.36, 1] as const;
-
-const TEXT_CONTAINER_HEIGHT = 420;
-const DESC_CONTAINER_HEIGHT = 120;
-
-/* -------------------------------------------------------------------------- */
-/*                                  COMPONENT                                 */
-/* -------------------------------------------------------------------------- */
-
-export default function Offerings() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const stickyRef = useRef<HTMLDivElement>(null);
-
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const isInView = useInView(stickyRef, {
-    margin: "-10% 0px -10% 0px",
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                            SCROLL PROGRESS                               */
-  /* ------------------------------------------------------------------------ */
+export default function CinematicSliderSection() {
+  const containerRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
-  /* ------------------------------------------------------------------------ */
-  /*                     SNAP TO SLIDE ON SCROLL                              */
-  /* ------------------------------------------------------------------------ */
+  const smoothProgress = useSpring(
+    scrollYProgress,
+    SMOOTH_SCROLL_CONFIG
+  );
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const newIndex = Math.min(
-      ITEM_COUNT - 1,
-      Math.floor(latest * ITEM_COUNT)
-    );
-    if (newIndex !== activeIndex) {
-      setActiveIndex(newIndex);
-    }
-  });
+  /* -------------------------------------------------------------------------- */
+  /* SEGMENT */
+  /* -------------------------------------------------------------------------- */
 
-  /* ------------------------------------------------------------------------ */
-  /*                            NAVIGATION                                     */
-  /* ------------------------------------------------------------------------ */
+  const SEG = 0.25;
 
-  const scrollToIndex = useCallback((index: number) => {
-    if (!containerRef.current) return;
+  const hStart = 0;
+  const hCenter = SEG * 0.45;
+  const hEnd = SEG;
 
-    const sectionTop = containerRef.current.offsetTop;
-    const sectionHeight = containerRef.current.offsetHeight;
-    const clampedIndex = Math.min(index, ITEM_COUNT - 1);
-    const targetScroll = sectionTop + (sectionHeight * clampedIndex) / ITEM_COUNT;
+  const CENTER_HOLD = 0.08;
 
-    window.scrollTo({
-      top: targetScroll,
-      behavior: "smooth",
-    });
-  }, []);
+  /* -------------------------------------------------------------------------- */
+  /* HEADLINE ANIMATION */
+  /* -------------------------------------------------------------------------- */
 
-  /* ------------------------------------------------------------------------ */
-  /*                         REDUCED MOTION                                    */
-  /* ------------------------------------------------------------------------ */
+  const headlineOpacity = useTransform(
+    smoothProgress,
+    [
+      hStart,
+      hCenter - CENTER_HOLD,
+      hCenter,
+      hCenter + CENTER_HOLD,
+      hEnd,
+    ],
+    [0, 1, 1, 1, 0]
+  );
 
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const headlineY = useTransform(
+    smoothProgress,
+    [hStart, hCenter, hEnd],
+    [40, 0, -20]
+  );
 
-  const transitionConfig = prefersReducedMotion
-    ? { duration: 0 }
-    : { duration: 1.2, ease: EASE };
+  const headlineScale = useTransform(
+    smoothProgress,
+    [hStart, hCenter, hEnd],
+    [0.985, 1, 1]
+  );
 
-  const imageTransition = prefersReducedMotion
-    ? { duration: 0 }
-    : { duration: 1.2, ease: EASE };
+  /* -------------------------------------------------------------------------- */
+  /* PARAGRAPH */
+  /* -------------------------------------------------------------------------- */
 
-  const textTransition = prefersReducedMotion
-    ? { duration: 0 }
-    : { duration: 0.6, delay: 0.15, ease: EASE };
+  const paraOpacity = useTransform(
+    smoothProgress,
+    [
+      hCenter * 0.65,
+      hCenter,
+      hEnd * 0.8,
+      hEnd,
+    ],
+    [0, 1, 1, 0]
+  );
 
-  /* ------------------------------------------------------------------------ */
-  /*                              RENDER                                       */
-  /* ------------------------------------------------------------------------ */
+  /* -------------------------------------------------------------------------- */
+  /* DEBUG */
+  /* -------------------------------------------------------------------------- */
+
+  const progressX = useTransform(
+    smoothProgress,
+    [0, 1],
+    [0, 240]
+  );
 
   return (
     <section
       ref={containerRef}
-      className="relative bg-[#131313]"
-      style={{ height: `${SECTION_HEIGHT_VH}vh` }}
-      aria-label="Our offerings"
-      role="region"
+      className="relative h-[500vh] bg-[#ECE8E1]"
     >
-      <div
-        ref={stickyRef}
-        className="sticky top-0 h-screen w-full overflow-hidden"
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={
-            isInView
-              ? { opacity: 1, y: 0 }
-              : { opacity: 0, y: 40 }
-          }
-          transition={transitionConfig}
-          className="w-full h-full"
-        >
-          {/* FULL SCREEN CONTAINER */}
-          <div className="relative w-full h-full overflow-hidden bg-black">
-            {/* =========================================================== */}
-            {/*                    FULL-SCREEN FADE + SCALE IMAGES          */}
-            {/* =========================================================== */}
+      {/* -------------------------------------------------------------------- */}
+      {/* STICKY WRAPPER */}
+      {/* -------------------------------------------------------------------- */}
 
-            <div className="absolute inset-0">
-              {OFFERINGS.map((offering, index) => {
-                const isActive = index === activeIndex;
+      <div className="sticky top-0 h-screen overflow-hidden flex items-center p-6 md:p-8">
 
-                return (
+        {/* ------------------------------------------------------------------ */}
+        {/* MAIN FRAME */}
+        {/* ------------------------------------------------------------------ */}
+
+        <div className="relative w-full h-full rounded-[45px] overflow-hidden border border-black/5 bg-[#F3F1EE] shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
+
+          {/* -------------------------------------------------------------- */}
+          {/* DEBUG BAR */}
+          {/* -------------------------------------------------------------- */}
+
+          {DEBUG && (
+            <motion.div
+              className="fixed top-0 left-0 h-[4px] bg-black z-[999999]"
+              style={{
+                scaleX: smoothProgress,
+                transformOrigin: "left",
+                width: "100%",
+              }}
+            />
+          )}
+
+          {/* -------------------------------------------------------------- */}
+          {/* DEBUG PANEL */}
+          {/* -------------------------------------------------------------- */}
+
+          {DEBUG && (
+            <div className="fixed top-6 right-6 z-[999999] w-[260px] rounded-2xl border border-white/10 bg-black/85 backdrop-blur-xl p-5 text-white font-mono text-xs space-y-3 shadow-2xl">
+
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <span className="text-green-400 font-semibold">
+                  DEBUG PANEL
+                </span>
+
+                <span className="text-white/40">
+                  ON
+                </span>
+              </div>
+
+              {/* SEGMENTS */}
+
+              <div className="space-y-2">
+
+                <div className="flex justify-between">
+                  <span className="text-white/50">SEG</span>
+                  <span>{SEG.toFixed(3)}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-white/50">hStart</span>
+                  <span>{hStart.toFixed(3)}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-white/50">hCenter</span>
+                  <span>{hCenter.toFixed(3)}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-white/50">hEnd</span>
+                  <span>{hEnd.toFixed(3)}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-white/50">CENTER_HOLD</span>
+                  <span>{CENTER_HOLD.toFixed(3)}</span>
+                </div>
+              </div>
+
+              {/* LIVE */}
+
+              <div className="border-t border-white/10 pt-3 space-y-2">
+
+                <div className="text-green-400 font-semibold">
+                  LIVE VALUES
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-white/50">Scroll</span>
+                  <span>{smoothProgress.get().toFixed(3)}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-white/50">Opacity</span>
+                  <span>{headlineOpacity.get().toFixed(3)}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-white/50">Y</span>
+                  <span>{headlineY.get().toFixed(1)}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-white/50">Scale</span>
+                  <span>{headlineScale.get().toFixed(3)}</span>
+                </div>
+              </div>
+
+              {/* TIMELINE */}
+
+              <div className="border-t border-white/10 pt-3 space-y-2">
+
+                <div className="text-green-400 font-semibold">
+                  TIMELINE
+                </div>
+
+                <div className="relative h-[10px] w-full rounded-full bg-white/10 overflow-hidden">
+
+                  {/* CURRENT POSITION */}
+
                   <motion.div
-                    key={offering.title}
-                    initial={false}
-                    animate={{
-                      opacity: isActive ? 1 : 0,
-                      scale: isActive ? 1 : 1.15,
+                    className="absolute top-0 left-0 h-full w-[4px] bg-green-400"
+                    style={{
+                      x: progressX,
                     }}
-                    transition={imageTransition}
-                    className="absolute inset-0 will-change-transform"
-                  >
-                    <Image
-                      src={`/images/offerings/${offering.image}`}
-                      alt={offering.title}
-                      fill
-                      priority={index === 0 || index === 1}
-                      loading={index <= 1 ? "eager" : "lazy"}
-                      sizes="100vw"
-                      quality={90}
-                      className="object-cover object-center"
-                    />
+                  />
 
-                    {/* Overlay */}
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background: `
-                          linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 45%, transparent 100%),
-                          linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 35%),
-                          rgba(0,0,0,0.1)
-                        `,
-                      }}
-                    />
-                  </motion.div>
-                );
-              })}
+                  {/* CENTER */}
+
+                  <div
+                    className="absolute top-0 h-full w-[2px] bg-yellow-400"
+                    style={{
+                      left: `${hCenter * 100}%`,
+                    }}
+                  />
+
+                  {/* END */}
+
+                  <div
+                    className="absolute top-0 h-full w-[2px] bg-red-400"
+                    style={{
+                      left: `${hEnd * 100}%`,
+                    }}
+                  />
+                </div>
+              </div>
             </div>
+          )}
 
-            {/* =========================================================== */}
-            {/*                         TOP CTA                           */}
-            {/* =========================================================== */}
+          {/* -------------------------------------------------------------- */}
+          {/* CONTENT WRAPPER */}
+          {/* -------------------------------------------------------------- */}
 
-            <div className="absolute top-10 right-12 z-30">
-              <button
-                className="flex items-center gap-3 text-white text-[0.95rem] font-medium tracking-[-0.03em] transition-opacity duration-300 hover:opacity-70 cursor-pointer"
-                aria-label="View all services"
-                onClick={() => {
-                  /* Add navigation logic */
+          <div className="relative w-full h-full max-w-[1500px] mx-auto px-8 md:px-14 py-10 md:py-14">
+
+            {/* ------------------------------------------------------------ */}
+            {/* SLIDER AREA */}
+            {/* ------------------------------------------------------------ */}
+
+            <div className="relative w-full h-full flex items-center rounded-[45px]">
+
+              {/* -------------------------------------------------------- */}
+              {/* TEXT CONTENT */}
+              {/* -------------------------------------------------------- */}
+
+              <motion.div
+                style={{
+                  opacity: headlineOpacity,
+                  y: headlineY,
+                  scale: headlineScale,
                 }}
+                className="relative z-10 w-full"
               >
-                See all services
-                <span className="text-lg" aria-hidden="true">→</span>
-              </button>
-            </div>
+                {/* LABEL */}
 
-            {/* =========================================================== */}
-            {/*                         MAIN CONTENT                        */}
-            {/* =========================================================== */}
-
-            <div className="relative z-20 h-full flex flex-col justify-between">
-              {/* ======================================================= */}
-              {/*                         TEXT AREA                      */}
-              {/* ======================================================= */}
-
-              <div className="flex-1 flex items-end">
-                <div className="w-full px-10 md:px-14 lg:px-20 pb-28">
-                  {/* Counter */}
-                  <div
-                    className="mb-8 text-white/70 text-[1rem] font-medium"
-                    aria-live="polite"
-                    aria-atomic="true"
-                  >
-                    <span className="tabular-nums">
-                      {String(activeIndex + 1).padStart(2, "0")} / {String(ITEM_COUNT).padStart(2, "0")}
-                    </span>
-                  </div>
-
-                  {/* Title - Fade + slide up */}
-                  <div
-                    className="relative overflow-hidden"
-                    style={{ height: TEXT_CONTAINER_HEIGHT }}
-                  >
-                    {OFFERINGS.map((offering, index) => {
-                      const isActive = index === activeIndex;
-
-                      return (
-                        <motion.h2
-                          key={offering.title}
-                          initial={false}
-                          animate={{
-                            opacity: isActive ? 1 : 0,
-                            y: isActive ? 0 : 30,
-                          }}
-                          transition={textTransition}
-                          className="absolute inset-0 max-w-[600px] text-white text-[clamp(3rem,5.5vw,6.5rem)] leading-[0.9] font-semibold tracking-[-0.05em]"
-                        >
-                          {offering.title}
-                        </motion.h2>
-                      );
-                    })}
-                  </div>
-
-                  {/* Description - Fade + slide up */}
-                  <div
-                    className="relative overflow-hidden mt-2"
-                    style={{ height: DESC_CONTAINER_HEIGHT }}
-                  >
-                    {OFFERINGS.map((offering, index) => {
-                      const isActive = index === activeIndex;
-
-                      return (
-                        <motion.p
-                          key={offering.title}
-                          initial={false}
-                          animate={{
-                            opacity: isActive ? 1 : 0,
-                            y: isActive ? 0 : 20,
-                          }}
-                          transition={{
-                            ...textTransition,
-                            delay: isActive ? 0.25 : 0,
-                          }}
-                          className="absolute max-w-[500px] text-white/90 text-[1.1rem] md:text-[1.2rem] leading-[1.5]"
-                        >
-                          {offering.description}
-                        </motion.p>
-                      );
-                    })}
-                  </div>
+                <div className="mb-8 text-[22px] md:text-[30px] italic font-semibold tracking-[-0.04em] text-[#FFFFFF]">
+                  How.
                 </div>
-              </div>
 
-              {/* ======================================================= */}
-              {/*                       BOTTOM NAV                       */}
-              {/* ======================================================= */}
+                {/* HEADLINE */}
 
-              <div className="relative z-30 px-10 md:px-14 lg:px-20 pb-10">
-                <div className="grid grid-cols-4 gap-8">
-                  {OFFERINGS.map((offering, index) => {
-                    const isActive = index === activeIndex;
+                <h1 className="max-w-[1200px] text-[72px] md:text-[96px] leading-[0.95] tracking-[-0.06em] font-medium text-[#FFFFFF]">
+                  Don&apos;t just present ideas.
+                  <br />
+                  Let people step into them.
+                </h1>
 
-                    return (
-                      <motion.button
-                        key={offering.title}
-                        onClick={() => scrollToIndex(index)}
-                        className="relative text-left cursor-pointer group"
-                        aria-label={`Go to ${offering.title}`}
-                      >
-                        <motion.div
-                          animate={{ opacity: isActive ? 1 : 0.2 }}
-                          transition={{ duration: 0.3 }}
-                          className="h-px mb-4 bg-white transition-transform duration-300 group-hover:scale-x-105 origin-left"
-                        />
-                        <motion.div
-                          animate={{ color: isActive ? "#ffffff" : "rgba(255,255,255,0.35)" }}
-                          transition={{ duration: 0.3 }}
-                          className="text-[0.95rem] font-medium tracking-[-0.03em] transition-colors duration-300"
-                        >
-                          {offering.title}
-                        </motion.div>
-                      </motion.button>
-                    );
-                  })}
-                </div>
-              </div>
+                {/* PARAGRAPH */}
 
-              {/* ======================================================= */}
-              {/*                         CTA BUTTON                     */}
-              {/* ======================================================= */}
-
-              <div className="absolute right-10 md:right-14 lg:right-20 bottom-24 z-30">
-                <button
-                  className="w-[62px] h-[62px] rounded-full bg-[#A5A5A5] flex items-center justify-center text-white text-[2rem] transition-transform duration-300 hover:scale-105 cursor-pointer"
-                  aria-label="Learn more about this offering"
-                  onClick={() => {
-                    /* Add navigation logic */
+                <motion.p
+                  style={{
+                    opacity: paraOpacity,
                   }}
+                  className="mt-12 max-w-[760px] text-[20px] md:text-[22px] leading-[1.5] tracking-[-0.03em] text-[#7A7A7A]"
                 >
-                  ↗
-                </button>
-              </div>
+                  We design immersive environments that transform passive
+                  audiences into active participants through spatial
+                  storytelling, interaction, and cinematic digital experiences.
+                </motion.p>
+              </motion.div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

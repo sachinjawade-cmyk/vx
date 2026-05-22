@@ -51,7 +51,7 @@ const WORKS = [
 /* -------------------------------------------------------------------------- */
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-const SECTION_BACKGROUND = "#000000";
+const SECTION_BACKGROUND = "#FFFFFF";
 const ENTRY_MARGIN = "-10% 0px -10% 0px";
 
 /* -------------------------------------------------------------------------- */
@@ -73,7 +73,7 @@ function ReadMoreCTA() {
       className="group relative inline-flex items-center mt-6 cursor-pointer"
     >
       {/* Text with underline animation */}
-      <span className="relative text-xs uppercase tracking-[0.2em] text-[#888888] font-medium transition-colors duration-300 group-hover:text-[#F5F2EB]">
+      <span className="relative text-xs uppercase tracking-[0.2em] text-[#A47764] font-medium transition-colors duration-300 group-hover:text-[#8B6355]">
         Read More
         {/* Underline - hidden by default, reveals from left to right on hover */}
         <span
@@ -171,7 +171,7 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
           variants={textVariant}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
-          className="text-[clamp(1.6rem,3vw,2.6rem)] leading-[1.15] font-semibold tracking-[-0.025em] text-[#F5F2EB] mb-5"
+          className="text-[clamp(1.6rem,3vw,2.6rem)] leading-[1.15] font-semibold tracking-[-0.025em] text-[#131313] mb-5"
         >
           {title}
         </motion.h3>
@@ -187,7 +187,7 @@ function WorkItem({ title, description, image, align, index }: WorkItemProps) {
           }}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
-          className="text-[#888888] text-sm md:text-base leading-[1.7] max-w-[380px]"
+          className="text-[#9A9FA1] text-sm md:text-base leading-[1.7] max-w-[380px]"
         >
           {description}
         </motion.p>
@@ -283,7 +283,7 @@ export default function Work() {
               isHeaderVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }
             }
             transition={{ duration: 1.4, ease: EASE, delay: 0.1 }}
-            className="text-[clamp(2.4rem,6vw,5.5rem)] font-semibold tracking-[-0.04em] text-[#F5F2EB] leading-[1.0] mb-6"
+            className="text-[clamp(2.4rem,6vw,5.5rem)] font-semibold tracking-[-0.04em] text-[#131313] leading-[1.0] mb-6"
           >
             The Worlds We&apos;ve Built
           </motion.h2>
@@ -295,18 +295,14 @@ export default function Work() {
             isHeaderVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
           }
           transition={{ duration: 1.1, ease: EASE, delay: 0.25 }}
-          className="text-[#555555] text-sm md:text-base max-w-lg mx-auto leading-[1.7]"
+          className="text-[#A47764] text-sm md:text-base max-w-lg mx-auto leading-[1.7]"
         >
           Blending technology, design, and storytelling to craft unforgettable
           immersive environments.
         </motion.p>
       </div>
 
-      {/* ======================= DIVIDER ======================== */}
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="h-px bg-[#222222] w-full" />
-      </div>
 
       {/* ======================== WORK ITEMS ======================== */}
 

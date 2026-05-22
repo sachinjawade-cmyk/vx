@@ -31,7 +31,7 @@ const BLOCKS = [
 /*                               CONFIGURATION                                */
 /* -------------------------------------------------------------------------- */
 
-const BACKGROUND_COLOR = "#000000";
+const BACKGROUND_COLOR = "#FFFFFF";
 const SECTION_HEIGHT = "400vh";
 const CONTENT_Y_ENTER = 80;
 const CONTENT_Y_EXIT = -80;
@@ -62,7 +62,7 @@ function WordReveal({
   const words = text.split(" ");
 
   return (
-    <p className="text-[52px] sm:text-[68px] md:text-[82px] lg:text-[96px] xl:text-[108px] leading-[0.9] tracking-[-0.02em] font-medium text-[#F5F2EB] max-w-[1500px]">
+    <p className="text-[52px] sm:text-[68px] md:text-[82px] lg:text-[96px] xl:text-[108px] leading-[0.9] tracking-[-0.02em] font-medium text-[#131313] max-w-[1500px]">
       {words.map((word, i) => {
         const wordStart = start + (i / words.length) * (center - start);
         const wordEnd = wordStart + (center - wordStart) * 0.6;
@@ -168,7 +168,7 @@ export default function Philosophy() {
                   className="absolute inset-0 flex flex-col justify-center"
                 >
                   {/* Label */}
-                  <div className="text-[22px] md:text-[30px] font-semibold tracking-[-0.04em] text-[#8D8D8D] mb-6">
+                  <div className="text-[22px] md:text-[30px] font-semibold tracking-[-0.04em] text-[#A47764] mb-6">
                     {block.heading}
                   </div>
 

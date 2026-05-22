@@ -129,7 +129,7 @@ export default function Clients() {
           initial={{ opacity: 0, y: 48 }}
           animate={isHeaderVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1.2, ease: EASE, delay: 0.08 }}
-          className="text-[clamp(2.4rem,6vw,5rem)] font-semibold tracking-[-0.04em] text-[#111111] leading-[1.0] mb-5"
+          className="text-[clamp(2.4rem,6vw,5rem)] font-semibold tracking-[-0.04em] text-[#131313] leading-[1.0] mb-5"
         >
           Built with the Best
         </motion.h2>
@@ -138,7 +138,7 @@ export default function Clients() {
           initial={{ opacity: 0, y: 20 }}
           animate={isHeaderVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease: EASE, delay: 0.18 }}
-          className="text-[#888888] text-sm md:text-base mx-auto leading-[1.7] whitespace-nowrap"
+          className="text-[#A47764] text-sm md:text-base mx-auto leading-[1.7] whitespace-nowrap"
         >
           Built alongside brands that believe in innovation, experience, and impact.
         </motion.p>

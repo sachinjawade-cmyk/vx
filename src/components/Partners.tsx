@@ -29,7 +29,7 @@ const PARTNERS = [
 /*                              SECTION CONFIG                                */
 /* -------------------------------------------------------------------------- */
 
-const SECTION_BACKGROUND = "#000000";
+const SECTION_BACKGROUND = "#FFFFFF";
 
 const CINEMATIC_EASE = [
   0.22,
@@ -140,7 +140,7 @@ export default function Partners() {
           className="absolute inset-0 z-0"
           style={{ y: bgY }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#000000] to-[#0a0a0a]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FFFFFF] via-[#FFFFFF] to-[#FFFFFF]" />
         </motion.div>
 
         {/* --------------------------------------------------------------- */}
@@ -166,7 +166,7 @@ export default function Partners() {
 
               <motion.h2
                 variants={fadeUp}
-                className="text-[clamp(4rem,10vw,9rem)] leading-[1.5] font-semibold tracking-[-0.02em] text-[#343434] whitespace-nowrap select-none"
+                className="text-[clamp(4rem,10vw,9rem)] leading-[1.5] font-semibold tracking-[-0.02em] text-[#131313] whitespace-nowrap select-none"
               >
                 Shaping Experiences
               </motion.h2>
@@ -175,7 +175,7 @@ export default function Partners() {
 
               <motion.h3
                 variants={fadeUp}
-                className="-mt-3 text-[clamp(4rem,10vw,8rem)] leading-[0.8] font-semibold italic tracking-[-0.02em] text-[#F5F2EB] select-none"
+                className="-mt-3 text-[clamp(4rem,10vw,8rem)] leading-[0.8] font-semibold italic tracking-[-0.02em] text-[#A47764] select-none"
               >
                 Together
               </motion.h3>
@@ -201,15 +201,15 @@ export default function Partners() {
                       ease: CINEMATIC_EASE,
                     },
                   }}
-                  className="relative flex items-center justify-center w-[240px] h-[110px] rounded-[18px] bg-[#1D1D1D] border border-white/[0.08] backdrop-blur-xl overflow-hidden group cursor-pointer"
+                  className="relative flex items-center justify-center w-[240px] h-[110px] rounded-[18px] bg-[#F0F0E5] border border-[#A47764]/20 backdrop-blur-xl overflow-hidden group cursor-pointer"
                 >
                   {/* ---------------------- HOVER LIGHT ---------------------- */}
 
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-transparent via-[#A47764]/[0.08] to-transparent" />
 
                   {/* ------------------------- LOGO -------------------------- */}
 
-                  <div className="relative w-[160px] h-[70px]">
+                  <div className="relative w-[180px] h-[130px]">
                     <Image
                       src={partner.logo}
                       alt={partner.name}
@@ -231,7 +231,7 @@ export default function Partners() {
               className="group relative inline-flex items-center cursor-pointer"
             >
               {/* Text with underline animation */}
-              <span className="relative text-sm md:text-[15px] uppercase tracking-[0.14em] font-medium text-[#F5F2EB] transition-colors duration-300">
+              <span className="relative text-sm md:text-[15px] uppercase tracking-[0.14em] font-medium text-[#131313] transition-colors duration-300">
                 Join our partner network
                 {/* Underline - hidden by default, reveals from left to right on hover */}
                 <span

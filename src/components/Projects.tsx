@@ -1,204 +1,244 @@
 "use client";
 
+import { useRef } from "react";
 import {
   motion,
-  useInView,
   useScroll,
   useTransform,
+  useSpring,
 } from "framer-motion";
-
-import { useRef } from "react";
 
 /* -------------------------------------------------------------------------- */
 /*                                   CONTENT                                  */
 /* -------------------------------------------------------------------------- */
 
-const headlineLines = [
-  "We bring ideas",
-  "to life.",
+const HEADLINE_LINES = ["We bring ideas", "to life."];
+
+const HEADLINE_PARAGRAPH =
+  "Shaping immersive environments where communication becomes experience.";
+
+const PHILOSOPHY_BLOCKS = [
+  {
+    heading: "Why.",
+    text: "People forget information. They remember experiences.",
+  },
+  {
+    heading: "How.",
+    text: "Don't just present ideas. Let people step into them.",
+  },
+  {
+    heading: "Solution.",
+    text: "Immersive environments powered by design, motion, and technology.",
+  },
 ];
 
 /* -------------------------------------------------------------------------- */
-/*                             MOTION CONFIGURATION                           */
+/*                               CONFIGURATION                                */
 /* -------------------------------------------------------------------------- */
 
-const SECTION_SCROLL_HEIGHT = "180vh";
+const BACKGROUND_COLOR = "#FFFFFF";
+const SECTION_HEIGHT = "600vh"; // 4 segments × 150vh each
 
-const PARALLAX_Y_START = 0;
-const PARALLAX_Y_END = -80;
+const SMOOTH_SCROLL_CONFIG = {
+  stiffness: 170,
+  damping: 30,
+  mass: 0.55,
+};
 
-const HEADLINE_INITIAL_Y = 140;
-const PARAGRAPH_INITIAL_Y = 30;
-
-const HEADLINE_DURATION = 1.2;
-const PARAGRAPH_DURATION = 1;
-
-const HEADLINE_STAGGER_DELAY = 0.12;
-const PARAGRAPH_DELAY = 0.45;
-
-const CINEMATIC_EASE = [0.22, 1, 0.36, 1] as const;
+// 4 equal segments: [0] headline, [1] Why, [2] How, [3] Solution
+const TOTAL_SEGMENTS = 1 + PHILOSOPHY_BLOCKS.length; // 4
+const SEG = 1 / TOTAL_SEGMENTS; // 0.25
 
 /* -------------------------------------------------------------------------- */
-/*                                   STYLES                                   */
+/*                           WORD REVEAL COMPONENT                            */
 /* -------------------------------------------------------------------------- */
 
-const SECTION_BACKGROUND = "#000000";
+function WordReveal({
+  text,
+  progress,
+  start,
+  center,
+  className,
+}: {
+  text: string;
+  progress: ReturnType<typeof useSpring>;
+  start: number;
+  center: number;
+  className: string;
+}) {
+  const words = text.split(" ");
 
-const SECTION_GRADIENT =
-  "linear-gradient(180deg, rgba(19, 19, 19, 0.00) 50%, rgba(19, 19, 19, 0.00) 50%, rgba(19, 19, 19, 0.04) 56.5%, rgba(19, 19, 19, 0.13) 62.5%, rgba(19, 19, 19, 0.26) 67.5%, rgba(19, 19, 19, 0.42) 72.5%, rgba(19, 19, 19, 0.58) 77.5%, rgba(19, 19, 19, 0.74) 82.5%, rgba(19, 19, 19, 0.87) 87.5%, rgba(19, 19, 19, 0.96) 93.5%, #000000 100%)";
+  return (
+    <p className={className}>
+      {words.map((word, i) => {
+        const wordStart = start + (i / words.length) * (center - start);
+        const wordEnd = wordStart + (center - wordStart) * 0.6;
+
+        const opacity = useTransform(progress, [wordStart, wordEnd], [0, 1]);
+        const blur = useTransform(progress, [wordStart, wordEnd], [10, 0]);
+        const y = useTransform(progress, [wordStart, wordEnd], [20, 0]);
+        const filter = useTransform(blur, (v) =>
+          v > 0.1 ? `blur(${v}px)` : "none"
+        );
+
+        return (
+          <motion.span
+            key={i}
+            className="inline-block mr-[0.25em]"
+            style={{ opacity, filter, y }}
+          >
+            {word}
+          </motion.span>
+        );
+      })}
+    </p>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               MAIN COMPONENT                               */
+/* -------------------------------------------------------------------------- */
 
 export default function Projects() {
-  const sectionRef = useRef(null);
-
-  /* ------------------------------------------------------------------------ */
-  /*                              SECTION VISIBILITY                          */
-  /* ------------------------------------------------------------------------ */
-
-  const isInView = useInView(sectionRef, {
-    margin: "-20% 0px -20% 0px",
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                              SCROLL PROGRESS                             */
-  /* ------------------------------------------------------------------------ */
+  const containerRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
+    target: containerRef,
+    offset: ["start start", "end end"],
   });
 
-  /* ------------------------------------------------------------------------ */
-  /*                            CINEMATIC PARALLAX                            */
-  /* ------------------------------------------------------------------------ */
+  const smoothProgress = useSpring(scrollYProgress, SMOOTH_SCROLL_CONFIG);
 
-  // Parallax movement: section slides up as user scrolls
-  const smoothY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [PARALLAX_Y_START, PARALLAX_Y_END]
+  /* ---- Headline block: segment 0 (0 → SEG) ---- */
+  const hStart = 0;
+  const hCenter = SEG * 0.45;
+  const hEnd = SEG;
+
+  const headlineOpacity = useTransform(
+    smoothProgress,
+    [hStart, hStart + 0.02, hCenter, hEnd * 0.85, hEnd],
+    [0, 1, 1, 1, 0]
+  );
+  const headlineY = useTransform(
+    smoothProgress,
+    [hStart, hCenter, hEnd],
+    [80, 0, -80]
+  );
+  const headlineScale = useTransform(
+    smoothProgress,
+    [hStart, hCenter, hEnd],
+    [1, 1, 1]
   );
 
-  // Scale effect: slight zoom as it comes into view
-  const scale = useTransform(
-    scrollYProgress,
-    [0, 0.3, 0.7, 1],
-    [0.95, 1, 1, 0.98]
-  );
-
-  // Opacity for content fade
-  const contentOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.15, 0.85, 1],
+  // Sub-paragraph fades in after the headline words have revealed
+  const paraOpacity = useTransform(
+    smoothProgress,
+    [hCenter * 0.65, hCenter, hEnd * 0.8, hEnd + 0.5],
     [0, 1, 1, 0]
   );
 
   return (
     <section
-      ref={sectionRef}
-      className="relative z-20"
+      ref={containerRef}
+      className="relative"
       style={{
-        height: SECTION_SCROLL_HEIGHT,
-        background: SECTION_BACKGROUND,
+        height: SECTION_HEIGHT,
+        background: BACKGROUND_COLOR,
       }}
     >
-      {/* ------------------------------------------------------------------- */}
-      {/*                          STICKY FULLSCREEN                          */}
-      {/* ------------------------------------------------------------------- */}
+      {/* ======================= STICKY VIEWPORT ======================= */}
 
-      <div className="sticky top-0 min-h-screen px-6 md:px-24 overflow-hidden flex items-center">
+      <div className="sticky top-0 h-screen overflow-hidden flex items-center">
+        <div className="w-full max-w-[1500px] mx-auto px-8 md:px-14">
+          <div className="relative w-full flex items-center h-[600px]">
 
-        {/* --------------------------------------------------------------- */}
-        {/*                        SECTION TOP GRADIENT                     */}
-        {/* --------------------------------------------------------------- */}
+            {/* ================= BLOCK 0: HEADLINE ================= */}
 
-        <div
-          className="absolute top-0 left-0 w-full h-48 md:h-72 pointer-events-none -translate-y-full"
-          style={{
-            background: SECTION_GRADIENT,
-          }}
-        />
-
-        {/* --------------------------------------------------------------- */}
-        {/*                           CONTENT WRAPPER                       */}
-        {/* --------------------------------------------------------------- */}
-
-        <motion.div
-          style={{
-            y: smoothY,
-            scale: scale,
-            opacity: contentOpacity
-          }}
-          className="max-w-7xl mx-auto relative z-10 w-full"
-        >
-          {/* ----------------------------------------------------------- */}
-          {/*                           HEADLINE                          */}
-          {/* ----------------------------------------------------------- */}
-
-          <div className="leading-[0.88] tracking-[-0.06em]">
-            {headlineLines.map((line, index) => (
-              <div key={index}>
-                <motion.h2
-                  initial={{
-                    y: HEADLINE_INITIAL_Y,
-                    opacity: 0,
-                  }}
-                  animate={
-                    isInView
-                      ? {
-                        y: 0,
-                        opacity: 1,
-                      }
-                      : {
-                        y: HEADLINE_INITIAL_Y,
-                        opacity: 0,
-                      }
-                  }
-                  transition={{
-                    duration: HEADLINE_DURATION,
-                    delay:
-                      index *
-                      HEADLINE_STAGGER_DELAY,
-                    ease: CINEMATIC_EASE,
-                  }}
-                  className="text-[72px] sm:text-[92px] md:text-[120px] lg:text-[160px] font-semibold text-[#F5F2EB] leading-[0.88] tracking-[-0.06em] will-change-transform"
-                >
-                  {line}
-                </motion.h2>
+            <motion.div
+              style={{
+                opacity: headlineOpacity,
+                y: headlineY,
+                scale: headlineScale,
+              }}
+              className="absolute inset-0 flex flex-col justify-center"
+            >
+              {/* Word-by-word reveal for each headline line */}
+              <div className="leading-[0.88] tracking-[-0.06em]">
+                {HEADLINE_LINES.map((line, lineIdx) => (
+                  <WordReveal
+                    key={lineIdx}
+                    text={line}
+                    progress={smoothProgress}
+                    start={hStart + lineIdx * 0.025}
+                    center={hCenter + lineIdx * 0.012}
+                    className="text-[72px] sm:text-[92px] md:text-[120px] lg:text-[160px] font-semibold text-[#131313] leading-[0.88] tracking-[-0.06em]"
+                  />
+                ))}
               </div>
-            ))}
+
+              {/* Sub-paragraph */}
+              <motion.p
+                style={{ opacity: paraOpacity }}
+                className="mt-10 max-w-4xl text-lg md:text-2xl leading-[1.45] text-[#A47764]"
+              >
+                {HEADLINE_PARAGRAPH}
+              </motion.p>
+            </motion.div>
+
+            {/* ================= BLOCKS 1–3: PHILOSOPHY ================= */}
+
+            {PHILOSOPHY_BLOCKS.map((block, index) => {
+              const start = SEG * (index + 1);
+              const center = start + SEG * 0.5;
+              const end = start + SEG;
+
+            const opacity = useTransform(
+                smoothProgress,
+                [
+                  start,
+                  center - 0.1,
+                  center,
+                  center + 0.1,
+                  end
+                ],
+                [0, 1, 1, 1, 0]
+              );
+              const y = useTransform(
+                smoothProgress,
+                [start, center, end],
+                [20, 0, -200]
+              );
+              const scale = useTransform(
+                smoothProgress,
+                [start, center, end],
+                [0.985, 1, 0.985]
+              );
+
+              return (
+                <motion.div
+                  key={index}
+                  style={{ opacity, y, scale }}
+                  className="absolute inset-0 flex flex-col justify-center"
+                >
+                 {/* Label */}
+                  <div className="text-[22px] md:text-[30px] italic font-semibold tracking-[-0.04em] text-[#A47764] mb-6">
+                    {block.heading}
+                  </div>  
+
+                  {/* Word-by-word reveal */}
+                  <WordReveal
+                    text={block.text}
+                    progress={smoothProgress}
+                    start={start}
+                    center={center}
+                    className="text-[45px] sm:text-[68px] md:text-[82px] lg:text-[96px] xl:text-[108px] leading-[0.9] tracking-[-0.02em] font-medium text-[#131313] max-w-[1300px]"
+                  />
+                </motion.div>
+              );
+            })}
+
           </div>
-
-          {/* ----------------------------------------------------------- */}
-          {/*                           PARAGRAPH                         */}
-          {/* ----------------------------------------------------------- */}
-
-          <motion.p
-            initial={{
-              opacity: 0,
-              y: PARAGRAPH_INITIAL_Y,
-            }}
-            animate={
-              isInView
-                ? {
-                  opacity: 1,
-                  y: 0,
-                }
-                : {
-                  opacity: 0,
-                  y: PARAGRAPH_INITIAL_Y,
-                }
-            }
-            transition={{
-              duration: PARAGRAPH_DURATION,
-              delay: PARAGRAPH_DELAY,
-              ease: CINEMATIC_EASE,
-            }}
-            className="mt-12 max-w-2xl text-lg md:text-2xl leading-[1.45] text-[#D1D1D1]"
-          >
-            Shaping immersive environments where
-            communication becomes experience.
-          </motion.p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
