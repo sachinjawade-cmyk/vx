@@ -1,0 +1,59 @@
+type User @table {
+  displayName: String!
+  email: String!
+  createdAt: Timestamp!
+  photoUrl: String
+  role: String
+}
+
+type Article @table {
+  title: String!
+  content: String!
+  publishedAt: Timestamp!
+  createdAt: Timestamp!
+  summary: String
+  tags: [String]
+  imageUrl: String
+  author: User
+}
+
+type Product @table {
+  name: String!
+  description: String!
+  price: Float!
+  createdAt: Timestamp!
+  sku: String
+  category: String
+  imageUrl: String
+  inStock: Boolean
+  creator: User
+}
+
+type Comment @table {
+  content: String!
+  createdAt: Timestamp!
+  parentId: UUID
+  approved: Boolean
+  user: User
+  article: Article
+  product: Product
+}
+
+type Inquiry @table {
+  name: String!
+  email: String!
+  subject: String!
+  message: String!
+  createdAt: Timestamp!
+  resolved: Boolean
+  resolvedAt: Timestamp
+  user: User
+}
+
+type SubscriptionType @table {
+  email: String!
+  createdAt: Timestamp!
+  firstName: String
+  lastName: String
+  status: String
+}
